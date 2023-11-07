@@ -1,6 +1,6 @@
-# Contribute to project_title
+# Contribute to IOTA Sandbox
 
-This document describes how to contribute to project_title.
+This document describes how to contribute to IOTA Sandbox.
 We encourage everyone with knowledge and passion in IOTA technology to do so.
 
 Thanks! :heart:
@@ -44,13 +44,13 @@ Please check the following list:
 
 - **Do not open a GitHub issue for [security vulnerabilities](.github/SECURITY.MD)**, instead, please contact us at [security@iota.org](mailto:security@iota.org).
 
-- **Ensure the bug was not already reported** by searching on GitHub under [**Issues**](https://github.com/iotaledger/template/issues). If the bug has already been reported **and the issue is still open**, add a comment to the existing issue instead of opening a new one.
+- **Ensure the bug was not already reported** by searching on GitHub under [**Issues**](https://github.com/iotaledger/iota-sandbox/issues). If the bug has already been reported **and the issue is still open**, add a comment to the existing issue instead of opening a new one.
 
 **Note:** If you find a **Closed** issue that seems similar to what you're experiencing, open a new issue and include a link to the original issue in the body of your new one.
 
 ### Submitting a bug report
 
-To report a bug, [open a new issue](https://github.com/iotaledger/template/issues/new), and be sure to include as many details as possible, using the template.
+To report a bug, [open a new issue](https://github.com/iotaledger/iota-sandbox/issues/new), and be sure to include as many details as possible, using the template.
 
 **Note:** Minor changes such as fixing a typo can but do not need an open issue.
 
@@ -67,11 +67,11 @@ This section guides you through suggesting a new feature. Following these guidel
 
 ### Before suggesting a new feature
 
-**Ensure the feature has not already been suggested** by searching on GitHub under [**Issues**](https://github.com/iotaledger/template/labels/request).
+**Ensure the feature has not already been suggested** by searching on GitHub under [**Issues**](https://github.com/iotaledger/iota-sandbox/labels/request).
 
 ### Suggesting a new feature
 
-To suggest a new feature, open a [Feature Request](https://github.com/iotaledger/template/issues/new?template=feature_request.yml).
+To suggest a new feature, open a [Feature Request](https://github.com/iotaledger/iota-sandbox/issues/new?template=feature_request.yml).
 
 </details>
 
@@ -85,13 +85,13 @@ This section guides you through building a new feature. Following these guidelin
 
 ### Before building a new feature
 
-Make sure to discuss the feature in [Discussions](https://github.com/iotaledger/template/discussions)
+Make sure to discuss the feature in [Discussions](https://github.com/iotaledger/iota-sandbox/discussions)
 
 Otherwise, your feature may not be approved at all.
 
 ### Building a new feature
 
-To build a new feature, check out a new branch based on the <!-- TODO Choose branch --> `develop` branch, and be sure to document any public-facing APIs, using code comments.
+To build a new feature, check out a new branch based on the `main` branch, and be sure to document any public-facing APIs, using code comments.
 </details>
 
 <br>
@@ -110,29 +110,22 @@ Before submitting a pull request, please follow these steps to have your contrib
 
 - A pull request can be merged only if it references an open issue
 
-    **Note:** You don't need to open an issue for minor changes such as typos, but you can if you want.
-
-
-<!-- TODO
-Add project specific requirements like formatting, linting, tests, comments, license and so on
--->
+> [!NOTE]
+> You don't need to open an issue for minor changes such as typos, but you can if you want.
 
 ### Submitting a pull request
 
 The following is a typical workflow for submitting a new pull request:
 
-<!-- TODO
-You may add project specific steps and change the branch
--->
-
 1. Fork this repository
 2. Create a new branch based on your fork. For example, `git checkout -b fix/my-fix` or ` git checkout -b feat/my-feature`.
 3. Commit changes and push them to your fork
-4. Target your pull request to be merged with `develop`
+4. Target your pull request to be merged with `main`
 
 If all [status checks](https://help.github.com/articles/about-status-checks/) pass, and the maintainer approves the PR, it will be merged.
 
-**Note:** Reviewers may ask you to complete additional work, tests, or other changes before your pull request can be approved and merged.
+> [!NOTE] 
+> Reviewers may ask you to complete additional work, tests, or other changes before your pull request can be approved and merged.
 </details>
 
 <br>

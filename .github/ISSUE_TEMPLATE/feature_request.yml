@@ -5,7 +5,7 @@ labels: "request"
 body:
 - type: markdown
   attributes:
-    value: Before requesting a feature, please search for existing [feature requests](https://github.com/iotaledger/template/labels/request) to avoid creating duplicates.
+    value: Before requesting a feature, please search for existing [feature requests](https://github.com/iotaledger/iota-sandbox/labels/request) to avoid creating duplicates.
 - type: textarea
   id: feature-description
   attributes:
