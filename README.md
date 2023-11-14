@@ -79,7 +79,8 @@ The IOTA Sandbox is a dedicated local network for developers to prototype and te
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Clone this repo and navigate into the `sandbox` directory.
+If you use the sandbox for the first time or want to start fresh, bootstrap it first by running `./bootstrap.sh`. You might need to run it as root or with sudo. After that you can just simply start the sandbox with `docker compose up`. If you want to detach the console add the `-d` flag.
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
