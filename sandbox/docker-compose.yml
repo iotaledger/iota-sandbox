@@ -8,6 +8,9 @@ services:
   hornet:
     container_name: hornet
     image: iotaledger/hornet:2.0
+    networks:
+      default:
+        ipv4_address: 172.18.211.11
     ulimits:
       nofile:
         soft: 16384
@@ -29,19 +32,21 @@ services:
       - "traefik.http.middlewares.redirect-dashboard.redirectregex.regex=^(https?://[^/]+)/?$$"
       - "traefik.http.middlewares.redirect-dashboard.redirectregex.replacement=$$1/dashboard/"
       - "traefik.http.middlewares.redirect-dashboard.redirectregex.permanent=true"
-
     cap_drop:
       - ALL
     volumes:
       - ./config_sandbox.json:/app/config.json:ro
-      - ./peering.json:/app/peering.json
-      - ./data:/app/data
+      - ./data/sandboxdb/hornet:/app/data/sandboxdb
+      - ./data/snapshots/hornet:/app/data/snapshots
     command:
       - "-c"
       - "config.json"
-      - "--db.path=data/database"
-      - "--p2p.db.path=data/p2pstore"
+      - "--db.path=data/sandboxdb"
+      - "--p2p.db.path=data/sandboxdb"
       - "--p2p.bindMultiAddresses=/ip4/0.0.0.0/tcp/15600,/ip6/::/tcp/15600"
+      - "--p2p.identityPrivateKey=1f46fad4f538a031d4f87f490f6bca4319dfd0307636a5759a22b5e8874bd608f9156ba976a12918c16a481c38c88a7b5351b769adc30390e93b6c0a63b09b79"
+      - "--p2p.peers=/ip4/172.18.211.12/tcp/15600/p2p/12D3KooWCKwcTWevoRKa2kEBputeGASvEBuDfRDSbe8t1DWugUmL"
+      - "--p2p.peerAliases=hornet-1"
       - "--snapshots.fullPath=data/snapshots/full_snapshot.bin"
       - "--snapshots.deltaPath=data/snapshots/delta_snapshot.bin"
       - "--inx.enabled=true"
@@ -65,7 +70,7 @@ services:
       - "${HTTP_PORT:-80}:80/tcp"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./data/letsencrypt:/letsencrypt"
+      #- "./data/letsencrypt:/letsencrypt"
 
 ##################################################################
 #  Monitoring                                                    #
@@ -144,7 +149,7 @@ services:
       hornet:
         condition: service_healthy
     volumes:
-      - ./data:/app/database
+      - ./data/sandboxdb:/app/database
     command:
       - "--inx.address=hornet:9029"
       - "--indexer.db.sqlite.path=database/indexer"
@@ -179,7 +184,7 @@ services:
         soft: 16384
         hard: 16384
     volumes:
-      - ./data:/app/database
+      - ./data/sandboxdb:/app/database
     command:
       - "--inx.address=hornet:9029"
       - "--participation.db.path=database/participation"
@@ -228,14 +233,14 @@ services:
       - "traefik.http.routers.hornet-dashboard.entrypoints=web"
       - "traefik.http.services.hornet-dashboard.loadbalancer.server.port=8081"
     volumes:
-      - ./data:/app/database
+      - ./data/sandboxdb:/app/database
     command:
       - "--inx.address=hornet:9029"
       - "--dashboard.bindAddress=inx-dashboard:8081"
       - "--dashboard.auth.identityFilePath=/app/database/dashboard/identity.key"
       - "--dashboard.auth.username=${DASHBOARD_USERNAME:-admin}"
-      - "--dashboard.auth.passwordHash=${DASHBOARD_PASSWORD:-0000000000000000000000000000000000000000000000000000000000000000}"
-      - "--dashboard.auth.passwordSalt=${DASHBOARD_SALT:-0000000000000000000000000000000000000000000000000000000000000000}"
+      - "--dashboard.auth.passwordHash=${DASHBOARD_PASSWORD:-c4a3fcd2ebec3ac0d105411653284efa9c636e754b9fbbaf58b3adcb974f3655}"
+      - "--dashboard.auth.passwordSalt=${DASHBOARD_SALT:-11ed024b8f74191c8484579db15623435c994ae4c28d9ad1b2ad8c1807bf7469}"
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=inx-dashboard:9312"
 
@@ -256,7 +261,7 @@ services:
         soft: 16384
         hard: 16384
     volumes:
-      - ./data/database_legacy:/app/data/database
+      - ./data/sandboxdb/legacy:/app/data/database
     command:
       - "--db.tangle.path=data/database/tangle"
       - "--db.snapshot.path=data/database/snapshot"
@@ -282,7 +287,7 @@ services:
         soft: 16384
         hard: 16384
     volumes:
-      - ./data/database_chrysalis:/app/data/database
+      - ./data/sandboxdb/database_chrysalis:/app/data/database
     command:
       - "--db.tangle.path=data/database/tangle"
       - "--db.utxo.path=data/database/utxo"
@@ -377,7 +382,7 @@ services:
     ports:
       - "6021:6060/tcp"
     volumes:
-      - ./sandboxdb/state:/app/state
+      - ./data/sandboxdb/state:/app/state
     command:
       - "--inx.address=hornet:9029"
       - "--coordinator.stateFilePath=state/coordinator.state"
@@ -385,37 +390,95 @@ services:
       - "--profiling.enabled=true"
       - "--profiling.bindAddress=inx-coordinator:6060"
 
+  # TODO Fix
+  hornet-1:
+    container_name: hornet-1
+    image: iotaledger/hornet:2.0
+    networks:
+      default:
+        ipv4_address: 172.18.211.12
+    ulimits:
+      nofile:
+        soft: 16384
+        hard: 16384
+    stop_grace_period: 5m
+    #depends_on:
+    #  traefik:
+    #    condition: service_started
+    #ports:
+    #  - "15600:15600/tcp"
+    #  - "14626:14626/udp"
+    #labels:
+    #  - "traefik.enable=true"
+    #  - "traefik.http.routers.hornet.service=hornet"
+    #  - "traefik.http.routers.hornet.rule=Host(`${NODE_HOST:-localhost}`)"
+    #  - "traefik.http.routers.hornet.entrypoints=web"
+    #  - "traefik.http.services.hornet.loadbalancer.server.port=14265"
+    #  - "traefik.http.routers.hornet.middlewares=redirect-dashboard"
+    #  - "traefik.http.middlewares.redirect-dashboard.redirectregex.regex=^(https?://[^/]+)/?$$"
+    #  - "traefik.http.middlewares.redirect-dashboard.redirectregex.replacement=$$1/dashboard/"
+    #  - "traefik.http.middlewares.redirect-dashboard.redirectregex.permanent=true"
+    cap_drop:
+      - ALL
+    volumes:
+      - ./config_sandbox.json:/app/config.json:ro
+      - ./data/sandboxdb/hornet-1:/app/data/sandboxdb
+      - ./data/snapshots/hornet-1:/app/data/snapshots
+    command:
+      - "-c"
+      - "config.json"
+      - "--db.path=data/sandboxdb"
+      - "--p2p.db.path=data/sandboxdb"
+      - "--p2p.bindMultiAddresses=/ip4/0.0.0.0/tcp/15600,/ip6/::/tcp/15600"
+      - "--snapshots.fullPath=data/snapshots/full_snapshot.bin"
+      - "--snapshots.deltaPath=data/snapshots/delta_snapshot.bin"
+      - "--inx.enabled=true"
+      - "--inx.bindAddress=hornet-1:9029"
+      - "--p2p.identityPrivateKey=a06b288ce7fc3b6f1e716f6f7d72050b53417aae4b305a68883550a3bb28597f254b082515a79391a7f13009b4133851a0c4d48e0e948809c3b46ff3e2500b4f"
+      - "--p2p.peers=/ip4/172.18.211.11/tcp/15600/p2p/12D3KooWSagdVaCrS14GeJhM8CbQr41AW2PiYMgptTyAybCbQuEY"
+      - "--p2p.peerAliases=hornet"
+      - "--prometheus.enabled=true"
+      - "--prometheus.bindAddress=hornet-1:9311"
+
   create-snapshots:
     container_name: create-snapshots
-    image: hornet:2.0
+    image: iotaledger/hornet:2.0
     volumes:
       - ./protocol_parameters.json:/app/protocol_parameters.json:ro
-      - ./snapshots:/app/snapshots
+      - ./data:/app/data
     command:
       - "tool"
       - "snap-gen"
       - "--protocolParametersPath=/app/protocol_parameters.json"
-      - "--mintAddress=snd1qq2kvnu9pqzptkggrpqrvltvagccsh6aj2fkdhla7p3lrsy9dwhdzu5l2ye"
-      - "--genesisAddresses=snd1qpszqzadsym6wpppd6z037dvlejmjuke7s24hm95s9fg9vpua7vlupxvxq2:1000000000000,snd1qqweu75ldpyann5jsthqsa6m0thx4tmqxncj6uqxf5q974pmqx30y5mcdp2:1000000000000"
-      - "--outputPath=/app/snapshots/hornet/full_snapshot.bin"
+      - "--mintAddress=snd1qq2kvnu9pqzptkggrpqrvltvagccsh6aj2fkdhla7p3lrsy9dwhdzpu0epw"
+      - "--genesisAddresses=snd1qpszqzadsym6wpppd6z037dvlejmjuke7s24hm95s9fg9vpua7vluuwu49a:1000000000000,snd1qqweu75ldpyann5jsthqsa6m0thx4tmqxncj6uqxf5q974pmqx30yfng7ya:1000000000000"
+      - "--outputPath=data/snapshots/hornet/full_snapshot.bin"
     profiles:
       - snapshots
 
   bootstrap-network:
     container_name: bootstrap-network
-    image: hornet:2.0
+    image: iotaledger/hornet:2.0
     environment:
       - "COO_PRV_KEYS=651941eddb3e68cb1f6ef4ef5b04625dcf5c70de1fdc4b1c9eadb2c219c074e0ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248c,0e324c6ff069f31890d496e9004636fd73d8e8b5bea08ec58a4178ca85462325f6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c"
     volumes:
       - ./config_sandbox.json:/app/config.json:ro
-      - ./snapshots/hornet-1:/app/snapshots
-      - ./sandboxdb/hornet-1:/app/sandboxdb
-      - ./sandboxdb/state:/app/state
+      - ./data/snapshots/hornet:/app/snapshots
+      - ./data/sandboxdb/hornet:/app/sandboxdb
+      - ./data/sandboxdb/state:/app/state
     command:
       - "tool"
       - "bootstrap-private-tangle"
-      - "--snapshotPath=/app/snapshots/full_snapshot.bin"
-      - "--databasePath=/app/sandboxdb"
-      - "--cooStatePath=/app/state/coordinator.state"
+      - "--configFile=config.json"
+      - "--snapshotPath=snapshots/full_snapshot.bin"
+      - "--databasePath=sandboxdb"
+      - "--cooStatePath=state/coordinator.state"
     profiles:
       - bootstrap
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.18.211.0/24"
