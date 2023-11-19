@@ -25,7 +25,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hornet.service=hornet"
-      - "traefik.http.routers.hornet.rule=Host(`${NODE_HOST:-localhost}`)"
+      - "traefik.http.routers.hornet.rule=Host(`localhost`)"
       - "traefik.http.routers.hornet.entrypoints=web"
       - "traefik.http.services.hornet.loadbalancer.server.port=14265"
       - "traefik.http.routers.hornet.middlewares=redirect-dashboard"
@@ -121,13 +121,13 @@ services:
     user: "65532"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`${NODE_HOST:-localhost}`) && (Path(`/grafana`) || PathPrefix(`/grafana/`))"
+      - "traefik.http.routers.grafana.rule=Host(`localhost`) && (Path(`/grafana`) || PathPrefix(`/grafana/`))"
       - "traefik.http.routers.grafana.entrypoints=web"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     environment:
       - GF_SERVER_ROOT_URL=/grafana
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
-      - GF_SERVER_DOMAIN=${NODE_HOST:-localhost}
+      - GF_SERVER_DOMAIN=localhost
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/node_dashboard.json
     volumes:
       - ./data/grafana:/var/lib/grafana
@@ -229,7 +229,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hornet-dashboard.service=hornet-dashboard"
-      - "traefik.http.routers.hornet-dashboard.rule=Host(`${NODE_HOST:-localhost}`) && (Path(`/dashboard`) || PathPrefix(`/dashboard/`))"
+      - "traefik.http.routers.hornet-dashboard.rule=Host(`localhost`) && (Path(`/dashboard`) || PathPrefix(`/dashboard/`))"
       - "traefik.http.routers.hornet-dashboard.entrypoints=web"
       - "traefik.http.services.hornet-dashboard.loadbalancer.server.port=8081"
     volumes:
@@ -316,7 +316,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.wasp-api.service=wasp-api"
-      - "traefik.http.routers.wasp-api.rule=Host(`${NODE_HOST:-localhost}`) && (Path(`/wasp/api`) || PathPrefix(`/wasp/api/`))"
+      - "traefik.http.routers.wasp-api.rule=Host(`localhost`) && (Path(`/wasp/api`) || PathPrefix(`/wasp/api/`))"
       - "traefik.http.routers.wasp-api.entrypoints=web"
       - "traefik.http.services.wasp-api.loadbalancer.server.port=9090"
       - "traefik.http.routers.wasp-api.middlewares=rewrite-wasp-api"
@@ -352,14 +352,14 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.wasp-dashboard.service=wasp-dashboard"
-      - "traefik.http.routers.wasp-dashboard.rule=Host(`${NODE_HOST:-localhost}`) && (Path(`/wasp/dashboard`) || PathPrefix(`/wasp/dashboard/`))"
+      - "traefik.http.routers.wasp-dashboard.rule=Host(`localhost`) && (Path(`/wasp/dashboard`) || PathPrefix(`/wasp/dashboard/`))"
       - "traefik.http.routers.wasp-dashboard.entrypoints=web"
       - "traefik.http.services.wasp-dashboard.loadbalancer.server.port=80"
       - "traefik.http.routers.wasp-dashboard.middlewares=rewrite-wasp-dashboard"
       - "traefik.http.middlewares.rewrite-wasp-dashboard.stripprefix.prefixes=/wasp/dashboard"
     environment:
-      - WASP_API_URL=http://${NODE_HOST:-localhost}/wasp/api
-      - L1_API_URL=http://${NODE_HOST:-localhost}
+      - WASP_API_URL=http://localhost/wasp/api
+      - L1_API_URL=http://localhost
     profiles:
       - wasp
 
@@ -390,7 +390,6 @@ services:
       - "--profiling.enabled=true"
       - "--profiling.bindAddress=inx-coordinator:6060"
 
-  # TODO Fix
   hornet-1:
     container_name: hornet-1
     image: iotaledger/hornet:2.0
@@ -402,22 +401,6 @@ services:
         soft: 16384
         hard: 16384
     stop_grace_period: 5m
-    #depends_on:
-    #  traefik:
-    #    condition: service_started
-    #ports:
-    #  - "15600:15600/tcp"
-    #  - "14626:14626/udp"
-    #labels:
-    #  - "traefik.enable=true"
-    #  - "traefik.http.routers.hornet.service=hornet"
-    #  - "traefik.http.routers.hornet.rule=Host(`${NODE_HOST:-localhost}`)"
-    #  - "traefik.http.routers.hornet.entrypoints=web"
-    #  - "traefik.http.services.hornet.loadbalancer.server.port=14265"
-    #  - "traefik.http.routers.hornet.middlewares=redirect-dashboard"
-    #  - "traefik.http.middlewares.redirect-dashboard.redirectregex.regex=^(https?://[^/]+)/?$$"
-    #  - "traefik.http.middlewares.redirect-dashboard.redirectregex.replacement=$$1/dashboard/"
-    #  - "traefik.http.middlewares.redirect-dashboard.redirectregex.permanent=true"
     cap_drop:
       - ALL
     volumes:
