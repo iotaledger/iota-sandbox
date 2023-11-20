@@ -244,6 +244,38 @@ services:
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=inx-dashboard:9312"
 
+  inx-faucet:
+    container_name: inx-faucet
+    image: iotaledger/inx-faucet:1.0
+    depends_on:
+      hornet:
+        condition: service_healthy
+      inx-indexer:
+        condition: service_started
+    restart: on-failure
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.faucet.service=faucet"
+      - "traefik.http.routers.faucet.rule=Host(`localhost`) && (Path(`/faucet`) || PathPrefix(`/faucet/`))"
+      - "traefik.http.routers.faucet.entrypoints=web"
+      - "traefik.http.services.faucet.loadbalancer.server.port=8091"
+      - "traefik.http.routers.faucet.middlewares=rewrite-faucet"
+      - "traefik.http.middlewares.rewrite-faucet.stripprefix.prefixes=/faucet"
+    ports:
+      - "8091:8091/tcp"
+      - "6024:6060/tcp"
+    environment:
+      - "FAUCET_PRV_KEY=887844b1e6bf9ca9e0b57584656add4370dbb49a8cb79e2e3032229f30fd80359e3df559ad0de8e5fa019b9ea46d1ee40879f3f3f74594a3306de9dfd43dcd25"
+    command:
+      - "--inx.address=hornet:9029"
+      - "--faucet.bindAddress=inx-faucet:8091"
+      - "--faucet.amount=100000000000"
+      - "--faucet.smallAmount=10000000000"
+      - "--faucet.maxAddressBalance=200000000000"
+      - "--faucet.rateLimit.enabled=false"
+      - "--profiling.enabled=true"
+      - "--profiling.bindAddress=inx-faucet:6060"
+
 ##################################################################
 #  Historic Data                                                 #
 ##################################################################
