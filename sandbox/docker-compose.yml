@@ -19,9 +19,6 @@ services:
     depends_on:
       traefik:
         condition: service_started
-    ports:
-      - "15600:15600/tcp"
-      - "14626:14626/udp"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hornet.service=hornet"
@@ -149,10 +146,9 @@ services:
       hornet:
         condition: service_healthy
     volumes:
-      - ./data/sandboxdb:/app/database
+      - ./data/sandboxdb/indexer:/app/database
     command:
       - "--inx.address=hornet:9029"
-      - "--indexer.db.sqlite.path=database/indexer"
       - "--restAPI.bindAddress=inx-indexer:9091"
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=inx-indexer:9312"
@@ -184,10 +180,9 @@ services:
         soft: 16384
         hard: 16384
     volumes:
-      - ./data/sandboxdb:/app/database
+      - ./data/sandboxdb/participation:/app/database
     command:
       - "--inx.address=hornet:9029"
-      - "--participation.db.path=database/participation"
       - "--restAPI.bindAddress=inx-participation:9892"
 
   inx-spammer:
@@ -233,11 +228,11 @@ services:
       - "traefik.http.routers.hornet-dashboard.entrypoints=web"
       - "traefik.http.services.hornet-dashboard.loadbalancer.server.port=8081"
     volumes:
-      - ./data/sandboxdb:/app/database
+      - ./data/sandboxdb/dashboard:/app/database
     command:
       - "--inx.address=hornet:9029"
       - "--dashboard.bindAddress=inx-dashboard:8081"
-      - "--dashboard.auth.identityFilePath=/app/database/dashboard/identity.key"
+      - "--dashboard.auth.identityFilePath=database/identity.key"
       - "--dashboard.auth.username=${DASHBOARD_USERNAME:-admin}"
       - "--dashboard.auth.passwordHash=${DASHBOARD_PASSWORD:-c4a3fcd2ebec3ac0d105411653284efa9c636e754b9fbbaf58b3adcb974f3655}"
       - "--dashboard.auth.passwordSalt=${DASHBOARD_SALT:-11ed024b8f74191c8484579db15623435c994ae4c28d9ad1b2ad8c1807bf7469}"
@@ -293,11 +288,8 @@ services:
         soft: 16384
         hard: 16384
     volumes:
-      - ./data/sandboxdb/legacy:/app/data/database
+      - ./data/sandboxdb/database_legacy:/app/database
     command:
-      - "--db.tangle.path=data/database/tangle"
-      - "--db.snapshot.path=data/database/snapshot"
-      - "--db.spent.path=data/database/spent"
       - "--inx.enabled=true"
       - "--inx.address=hornet:9029"
       - "--restAPI.bindAddress=inx-api-core-v0:9093"
@@ -319,10 +311,8 @@ services:
         soft: 16384
         hard: 16384
     volumes:
-      - ./data/sandboxdb/database_chrysalis:/app/data/database
+      - ./data/sandboxdb/database_chrysalis:/app/database
     command:
-      - "--db.tangle.path=data/database/tangle"
-      - "--db.utxo.path=data/database/utxo"
       - "--inx.enabled=true"      
       - "--inx.address=hornet:9029"
       - "--restAPI.bindAddress=inx-api-core-v1:9094"
@@ -353,21 +343,11 @@ services:
       - "traefik.http.services.wasp-api.loadbalancer.server.port=9090"
       - "traefik.http.routers.wasp-api.middlewares=rewrite-wasp-api"
       - "traefik.http.middlewares.rewrite-wasp-api.stripprefix.prefixes=/wasp/api"
-    ports:
-      - "4000:4000/tcp" # Peering
     volumes:
-      - ./data/wasp:/app/waspdb
+      - ./data/sandboxdb/wasp:/app/waspdb
     command:
       - "--logger.level=debug"
       - "--inx.address=hornet:9029"
-      - "--db.chainState.path=/app/waspdb/chains/data"
-      - "--p2p.identity.filePath=/app/waspdb/identity/identity.key"
-      - "--p2p.db.path=/app/waspdb/p2pstore"
-      - "--registries.chains.filePath=/app/waspdb/chains/chain_registry.json"
-      - "--registries.dkShares.path=/app/waspdb/dkshares"
-      - "--registries.trustedPeers.filePath=/app/waspdb/trusted_peers.json"
-      - "--registries.consensusState.path=/app/waspdb/chains/consensus"
-      - "--wal.path=/app/waspdb/wal"
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=wasp:9312"
     profiles:
@@ -390,8 +370,8 @@ services:
       - "traefik.http.routers.wasp-dashboard.middlewares=rewrite-wasp-dashboard"
       - "traefik.http.middlewares.rewrite-wasp-dashboard.stripprefix.prefixes=/wasp/dashboard"
     environment:
-      - WASP_API_URL=http://localhost/wasp/api
-      - L1_API_URL=http://localhost
+      - WASP_API_URL=http://localhost:${HTTP_PORT:-80}/wasp/api
+      - L1_API_URL=http://localhost:${HTTP_PORT:-80}
     profiles:
       - wasp
 
@@ -411,8 +391,6 @@ services:
         condition: service_healthy
     environment:
       - "COO_PRV_KEYS=651941eddb3e68cb1f6ef4ef5b04625dcf5c70de1fdc4b1c9eadb2c219c074e0ed3c3f1a319ff4e909cf2771d79fece0ac9bd9fd2ee49ea6c0885c9cb3b1248c,0e324c6ff069f31890d496e9004636fd73d8e8b5bea08ec58a4178ca85462325f6752f5f46a53364e2ee9c4d662d762a81efd51010282a75cd6bd03f28ef349c"
-    ports:
-      - "6021:6060/tcp"
     volumes:
       - ./data/sandboxdb/state:/app/state
     command:
