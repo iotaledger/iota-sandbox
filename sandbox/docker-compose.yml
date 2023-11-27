@@ -79,7 +79,7 @@ services:
     restart: unless-stopped
     user: "65532"
     volumes:
-      - ./data/prometheus/:/prometheus
+      - ./data/sandboxdb/prometheus/:/prometheus
       - ./assets/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - /etc/localtime:/etc/localtime:ro
     profiles:
@@ -127,7 +127,7 @@ services:
       - GF_SERVER_DOMAIN=localhost
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/node_dashboard.json
     volumes:
-      - ./data/grafana:/var/lib/grafana
+      - ./data/sandboxdb/grafana:/var/lib/grafana
       - ./assets/grafana/:/etc/grafana/provisioning/
     profiles:
       - monitoring
@@ -233,9 +233,8 @@ services:
       - "--inx.address=hornet:9029"
       - "--dashboard.bindAddress=inx-dashboard:8081"
       - "--dashboard.auth.identityFilePath=database/identity.key"
-      - "--dashboard.auth.username=${DASHBOARD_USERNAME:-admin}"
-      - "--dashboard.auth.passwordHash=${DASHBOARD_PASSWORD:-c4a3fcd2ebec3ac0d105411653284efa9c636e754b9fbbaf58b3adcb974f3655}"
-      - "--dashboard.auth.passwordSalt=${DASHBOARD_SALT:-11ed024b8f74191c8484579db15623435c994ae4c28d9ad1b2ad8c1807bf7469}"
+      - "--dashboard.auth.passwordHash=c4a3fcd2ebec3ac0d105411653284efa9c636e754b9fbbaf58b3adcb974f3655"
+      - "--dashboard.auth.passwordSalt=11ed024b8f74191c8484579db15623435c994ae4c28d9ad1b2ad8c1807bf7469"
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=inx-dashboard:9312"
 
@@ -284,6 +283,14 @@ services:
       nofile:
         soft: 16384
         hard: 16384
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.inx-api-core-v0.service=faucet"
+      - "traefik.http.routers.inx-api-core-v0.rule=Host(`localhost`) && (Path(`/legacy`) || PathPrefix(`/legacy/`))"
+      - "traefik.http.routers.inx-api-core-v0.entrypoints=web"
+      - "traefik.http.services.inx-api-core-v0.loadbalancer.server.port=9093"
+      - "traefik.http.routers.inx-api-core-v0.middlewares=rewrite-inx-api-core-v0"
+      - "traefik.http.middlewares.rewrite-inx-api-core-v0.stripprefix.prefixes=/legacy"
     volumes:
       - ./data/sandboxdb/database_legacy:/app/database
     command:
@@ -307,6 +314,14 @@ services:
       nofile:
         soft: 16384
         hard: 16384
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.inx-api-core-v1.service=faucet"
+      - "traefik.http.routers.inx-api-core-v1.rule=Host(`localhost`) && (Path(`/chrysalis`) || PathPrefix(`/chrysalis/`))"
+      - "traefik.http.routers.inx-api-core-v1.entrypoints=web"
+      - "traefik.http.services.inx-api-core-v1.loadbalancer.server.port=9093"
+      - "traefik.http.routers.inx-api-core-v1.middlewares=rewrite-inx-api-core-v1"
+      - "traefik.http.middlewares.rewrite-inx-api-core-v1.stripprefix.prefixes=/chrysalis"
     volumes:
       - ./data/sandboxdb/database_chrysalis:/app/database
     command:
