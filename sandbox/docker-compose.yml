@@ -79,7 +79,7 @@ services:
     restart: unless-stopped
     user: "65532"
     volumes:
-      - ./data/prometheus/:/prometheus
+      - ./data/sandboxdb/prometheus/:/prometheus
       - ./assets/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - /etc/localtime:/etc/localtime:ro
     profiles:
@@ -127,7 +127,7 @@ services:
       - GF_SERVER_DOMAIN=localhost
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/node_dashboard.json
     volumes:
-      - ./data/grafana:/var/lib/grafana
+      - ./data/sandboxdb/grafana:/var/lib/grafana
       - ./assets/grafana/:/etc/grafana/provisioning/
     profiles:
       - monitoring
