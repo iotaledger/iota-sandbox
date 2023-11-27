@@ -233,9 +233,8 @@ services:
       - "--inx.address=hornet:9029"
       - "--dashboard.bindAddress=inx-dashboard:8081"
       - "--dashboard.auth.identityFilePath=database/identity.key"
-      - "--dashboard.auth.username=${DASHBOARD_USERNAME:-admin}"
-      - "--dashboard.auth.passwordHash=${DASHBOARD_PASSWORD:-c4a3fcd2ebec3ac0d105411653284efa9c636e754b9fbbaf58b3adcb974f3655}"
-      - "--dashboard.auth.passwordSalt=${DASHBOARD_SALT:-11ed024b8f74191c8484579db15623435c994ae4c28d9ad1b2ad8c1807bf7469}"
+      - "--dashboard.auth.passwordHash=c4a3fcd2ebec3ac0d105411653284efa9c636e754b9fbbaf58b3adcb974f3655"
+      - "--dashboard.auth.passwordSalt=11ed024b8f74191c8484579db15623435c994ae4c28d9ad1b2ad8c1807bf7469"
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=inx-dashboard:9312"
 
