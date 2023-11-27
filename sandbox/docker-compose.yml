@@ -256,9 +256,6 @@ services:
       - "traefik.http.services.faucet.loadbalancer.server.port=8091"
       - "traefik.http.routers.faucet.middlewares=rewrite-faucet"
       - "traefik.http.middlewares.rewrite-faucet.stripprefix.prefixes=/faucet"
-    ports:
-      - "8091:8091/tcp"
-      - "6024:6060/tcp"
     environment:
       - "FAUCET_PRV_KEY=887844b1e6bf9ca9e0b57584656add4370dbb49a8cb79e2e3032229f30fd80359e3df559ad0de8e5fa019b9ea46d1ee40879f3f3f74594a3306de9dfd43dcd25"
     command:
