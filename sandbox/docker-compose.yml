@@ -410,18 +410,22 @@ services:
 #  Chronicle                                                     #
 ##################################################################
 
-  inx-chronicle:
-    container_name: inx-chronicle
+  chronicle:
+    container_name: chronicle
     image: ghcr.io/iotaledger/inx-chronicle:1.0.0-rc.2
-    ports:
-      - "8042:8042/tcp" # REST API
-      - "9100:9100/tcp" # Metrics
-    tty: true
     deploy:
       restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.chronicle.service=chronicle"
+      - "traefik.http.routers.chronicle.rule=Host(`localhost`) && (Path(`/chronicle`) || PathPrefix(`/chronicle/`))"
+      - "traefik.http.routers.chronicle.entrypoints=web"
+      - "traefik.http.services.chronicle.loadbalancer.server.port=8042"
+      - "traefik.http.routers.chronicle.middlewares=rewrite-chronicle"
+      - "traefik.http.middlewares.rewrite-chronicle.stripprefix.prefixes=/chronicle"
     command:
       - "--mongodb-conn-str=mongodb://mongo:27017"
       - "--influxdb-url=http://influx:8086"
