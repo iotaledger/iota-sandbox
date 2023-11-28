@@ -254,14 +254,6 @@ services:
       nofile:
         soft: 16384
         hard: 16384
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.inx-api-core-v0.service=inx-api-core-v0"
-      - "traefik.http.routers.inx-api-core-v0.rule=Host(`localhost`) && (Path(`/legacy`) || PathPrefix(`/legacy/`))"
-      - "traefik.http.routers.inx-api-core-v0.entrypoints=web"
-      - "traefik.http.services.inx-api-core-v0.loadbalancer.server.port=9093"
-      - "traefik.http.routers.inx-api-core-v0.middlewares=rewrite-inx-api-core-v0"
-      - "traefik.http.middlewares.rewrite-inx-api-core-v0.stripprefix.prefixes=/legacy"
     volumes:
       - ./data/sandboxdb/database_legacy:/app/database
     command:
@@ -285,14 +277,6 @@ services:
       nofile:
         soft: 16384
         hard: 16384
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.inx-api-core-v1.service=inx-api-core-v1"
-      - "traefik.http.routers.inx-api-core-v1.rule=Host(`localhost`) && (Path(`/chrysalis`) || PathPrefix(`/chrysalis/`))"
-      - "traefik.http.routers.inx-api-core-v1.entrypoints=web"
-      - "traefik.http.services.inx-api-core-v1.loadbalancer.server.port=9093"
-      - "traefik.http.routers.inx-api-core-v1.middlewares=rewrite-inx-api-core-v1"
-      - "traefik.http.middlewares.rewrite-inx-api-core-v1.stripprefix.prefixes=/chrysalis"
     volumes:
       - ./data/sandboxdb/database_chrysalis:/app/database
     command:
