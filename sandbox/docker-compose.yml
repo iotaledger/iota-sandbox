@@ -304,7 +304,7 @@ services:
         hard: 16384
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.inx-api-core-v0.service=faucet"
+      - "traefik.http.routers.inx-api-core-v0.service=inx-api-core-v0"
       - "traefik.http.routers.inx-api-core-v0.rule=Host(`localhost`) && (Path(`/legacy`) || PathPrefix(`/legacy/`))"
       - "traefik.http.routers.inx-api-core-v0.entrypoints=web"
       - "traefik.http.services.inx-api-core-v0.loadbalancer.server.port=9093"
@@ -335,7 +335,7 @@ services:
         hard: 16384
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.inx-api-core-v1.service=faucet"
+      - "traefik.http.routers.inx-api-core-v1.service=inx-api-core-v1"
       - "traefik.http.routers.inx-api-core-v1.rule=Host(`localhost`) && (Path(`/chrysalis`) || PathPrefix(`/chrysalis/`))"
       - "traefik.http.routers.inx-api-core-v1.entrypoints=web"
       - "traefik.http.services.inx-api-core-v1.loadbalancer.server.port=9093"
