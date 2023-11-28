@@ -12,8 +12,8 @@ if [ -d "data" ]; then
 fi
 
 # Prepare db directory
-mkdir -p data/grafana
-mkdir -p data/prometheus
+mkdir -p data/sandboxdb/grafana
+mkdir -p data/sandboxdb/prometheus
 mkdir -p data/sandboxdb/dashboard
 mkdir -p data/sandboxdb/database_legacy
 mkdir -p data/sandboxdb/database_chrysalis
