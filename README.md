@@ -25,62 +25,40 @@
 [![Apache 2.0 license][license-shield]][license-url]
 [![Discord][discord-shield]][discord-url]
 [![StackExchange][stackexchange-shield]][stackexchange-url]
-<!-- Add additional Badges. Some examples >
-![Format Badge](https://github.com/iotaledger/template/workflows/Format/badge.svg "Format Badge")
-![Audit Badge](https://github.com/iotaledger/template/workflows/Audit/badge.svg "Audit Badge")
-![Clippy Badge](https://github.com/iotaledger/template/workflows/Clippy/badge.svg "Clippy Badge")
-![BuildBadge](https://github.com/iotaledger/template/workflows/Build/badge.svg "Build Badge")
-![Test Badge](https://github.com/iotaledger/template/workflows/Test/badge.svg "Test Badge")
-![Coverage Badge](https://coveralls.io/repos/github/iotaledger/template/badge.svg "Coverage Badge")
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-    <a href="https://github.com/iotaledger/template">
+    <a href="https://github.com/iotaledger/iota-sandbox">
         <img src="banner.png" alt="Banner">
     </a>
-    <h3 align="center">project_title</h3>
+    <h3 align="center">IOTA Sandbox</h3>
     <p align="center">
-        project_description
+        A sandbox to easily start your own development environment
         <br />
         <a href="https://wiki.iota.org"><strong>Explore the docs »</strong></a>
         <br />
         <br />
-        <a href="https://github.com/iotaledger/template/labels/bug">Report Bug</a>
+        <a href="https://github.com/iotaledger/iota-sandbox/labels/bug">Report Bug</a>
         ·
-        <a href="https://github.com/iotaledger/template/labels/request">Request Feature</a>
+        <a href="https://github.com/iotaledger/iota-sandbox/labels/request">Request Feature</a>
     </p>
 </div>
 
 
 
 <!-- TABLE OF CONTENTS -->
-<!-- TODO 
-Edit the ToC to your needs. If your project is part of the wiki, you should link directly to the Wiki where possible and remove unneeded sections to prevent duplicates 
--->
 <details>
   <summary>Table of Contents</summary>
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -89,61 +67,10 @@ Edit the ToC to your needs. If your project is part of the wiki, you should link
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-1. Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `iotaledger`, `template`, `twitter_handle`, `email_client`, `email`, `project_title`, `project_description`, `TODO`.
-2. Edit the README to suit your needs by in it following the instructions here.
-3. Replace the `banner.png` with your own banner or remove it.
-4. Edit the issue and pull request templates if required. Keep in mind that the issue forms in this template add a `bug`/`request` label to the issues. Make sure they exist.
+The IOTA Sandbox is a dedicated local network for developers to prototype and test smart contracts, INX plugins, and L1 applications within the IOTA ecosystem. It provides a safe, isolated environment for development and experimentation, crucial for ensuring functionality before deployment in production scenarios. 
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-<!-- TODO
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples:
--->
-### Built With
-
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/iotaledger/template.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+> [!NOTE]
+> Note that the IOTA Sandbox is not intended for creating production-ready networks, but rather for research and development purposes only. Also always consider using the [public testnet](https://wiki.iota.org/build/networks-endpoints/#public-testnet) first. Join us in pioneering the next wave of IOTA innovations, where you can experiment with confidence and community support.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -152,7 +79,8 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Clone this repo and navigate into the `sandbox` directory.
+If you use the sandbox for the first time or want to start fresh, bootstrap it first by running `./bootstrap.sh`. You might need to run it as root or with sudo. After that you can just simply start the sandbox with `docker compose up`. If you want to detach the console add the `-d` flag.
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
@@ -163,12 +91,13 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] Add Explorer
+- [ ] Add Chronicle
+- [ ] Add Faucet
+    - [ ] L1
+    - [ ] L2
 
-See the [open issues](https://github.com/iotaledger/template/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/iotaledger/iota-sandbox/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -179,7 +108,7 @@ See the [open issues](https://github.com/iotaledger/template/issues) for a full 
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open a feature request.
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
@@ -201,40 +130,18 @@ Distributed under the Apache License. See `LICENSE` for more information.
 
 
 
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
-Project Link: [https://github.com/iotaledger/template](https://github.com/iotaledger/template)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/iotaledger/template.svg?style=for-the-badge
-[contributors-url]: https://github.com/iotaledger/template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/iotaledger/template.svg?style=for-the-badge
-[forks-url]: https://github.com/iotaledger/template/network/members
-[stars-shield]: https://img.shields.io/github/stars/iotaledger/template.svg?style=for-the-badge
-[stars-url]: https://github.com/iotaledger/template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/iotaledger/template.svg?style=for-the-badge
-[issues-url]: https://github.com/iotaledger/template/issues
-[license-shield]: https://img.shields.io/github/license/iotaledger/template.svg?style=for-the-badge
-[license-url]: https://github.com/iotaledger/template/blob/main/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/iotaledger/iota-sandbox.svg?style=for-the-badge
+[contributors-url]: https://github.com/iotaledger/iota-sandbox/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/iotaledger/iota-sandbox.svg?style=for-the-badge
+[forks-url]: https://github.com/iotaledger/iota-sandbox/network/members
+[stars-shield]: https://img.shields.io/github/stars/iotaledger/iota-sandbox.svg?style=for-the-badge
+[stars-url]: https://github.com/iotaledger/iota-sandbox/stargazers
+[issues-shield]: https://img.shields.io/github/issues/iotaledger/iota-sandbox.svg?style=for-the-badge
+[issues-url]: https://github.com/iotaledger/iota-sandbox/issues
+[license-shield]: https://img.shields.io/github/license/iotaledger/iota-sandbox.svg?style=for-the-badge
+[license-url]: https://github.com/iotaledger/iota-sandbox/blob/main/LICENSE
 [discord-shield]: https://img.shields.io/badge/Discord-9cf.svg?style=for-the-badge&logo=discord
 [discord-url]: https://discord.iota.org
 [stackexchange-shield]: https://img.shields.io/badge/StackExchange-9cf.svg?style=for-the-badge&logo=stackexchange

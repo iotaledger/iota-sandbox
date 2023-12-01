@@ -5,7 +5,7 @@ labels: "bug"
 body:
 - type: markdown
   attributes:
-    value: Before raising an issue, please search for existing [issues](https://github.com/iotaledger/template/labels/bug) to avoid creating duplicates. For questions and support please use [Discord](https://discord.iota.org).
+    value: Before raising an issue, please search for existing [issues](https://github.com/iotaledger/iota-sandbox/labels/bug) to avoid creating duplicates. For questions and support please use [Discord](https://discord.iota.org).
 - type: textarea
   id: bug-description
   attributes:
