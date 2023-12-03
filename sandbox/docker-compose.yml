@@ -80,7 +80,7 @@ services:
     user: "65532"
     volumes:
       - ./data/sandboxdb/prometheus/:/prometheus
-      - ./assets/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./assets/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - /etc/localtime:/etc/localtime:ro
     profiles:
       - monitoring
@@ -131,6 +131,25 @@ services:
       - ./assets/grafana/:/etc/grafana/provisioning/
     profiles:
       - monitoring
+
+  mongodb-exporter:
+    image: percona/mongodb_exporter:0.34
+    profiles:
+      - metrics
+    depends_on:
+      - mongo
+    container_name: mongodb-exporter
+    restart: unless-stopped
+    user: "65532"
+    ports:
+      - 9216:9261
+    command:
+      - "--mongodb.uri=mongodb://admin:pass@mongo:27017"
+      - "--mongodb.direct-connect=true"
+      - "--web.listen-address=:9216"
+      - "--log.level=info"
+      - "--discovering-mode"
+      - "--collect-all"
 
 ##################################################################
 #  INX Extensions                                                #
@@ -370,6 +389,48 @@ services:
       - L1_API_URL=http://localhost:${HTTP_PORT:-80}
     profiles:
       - wasp
+
+##################################################################
+#  Chronicle                                                     #
+##################################################################
+
+  chronicle:
+    container_name: chronicle
+    image: ghcr.io/iotaledger/inx-chronicle:1.0.0-rc.2
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.chronicle.service=chronicle"
+      - "traefik.http.routers.chronicle.rule=Host(`localhost`) && (Path(`/chronicle`) || PathPrefix(`/chronicle/`))"
+      - "traefik.http.routers.chronicle.entrypoints=web"
+      - "traefik.http.services.chronicle.loadbalancer.server.port=8042"
+      - "traefik.http.routers.chronicle.middlewares=rewrite-chronicle"
+      - "traefik.http.middlewares.rewrite-chronicle.stripprefix.prefixes=/chronicle"
+    command:
+      - "--mongodb-conn-str=mongodb://mongo:27017"
+      - "--influxdb-url=http://influx:8086"
+      - "--inx-url=http://hornet:9029"
+      - "--jwt-password=c4a3fcd2ebec3ac0d105411653284efa9c636e754b9fbbaf58b3adcb974f3655"
+      - "--jwt-salt=11ed024b8f74191c8484579db15623435c994ae4c28d9ad1b2ad8c1807bf7469"
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    # Warning: We don't keep logs to make development simpler
+    command: ["--quiet", "--logpath", "/dev/null"]
+    volumes:
+      - ./data/sandboxdb/chronicle/mongodb:/data/db
+
+  influx:
+    image: influxdb:1.8
+    container_name: influx
+    volumes:
+      - ./data/sandboxdb/chronicle/influxdb:/var/lib/influxdb
+      - ./assets/influxdb/init.iql:/docker-entrypoint-initdb.d/influx_init.iql
 
 ##################################################################
 #  Core                                                          #
