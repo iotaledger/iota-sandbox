@@ -1,0 +1,8 @@
+{
+    "fixerApiKey": "xxx",
+    "rootStorageFolder": "/app/data/.local-storage",
+    "allowedDomains": [
+        "*"
+    ],
+    "verboseLogging": true
+}
