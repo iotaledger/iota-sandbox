@@ -463,6 +463,11 @@ services:
   explorer-api:
     container_name: explorer-api
     image: iotaledger/explorer-api:ae687b8
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
     depends_on:
       hornet:
         condition: service_healthy
