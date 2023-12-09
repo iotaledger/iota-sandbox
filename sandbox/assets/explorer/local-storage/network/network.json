@@ -17,9 +17,9 @@
     "disableApiFallback": false,
     "milestoneInterval": 5,
     "description": "Network. This network makes no guarantees of its stability.",
-    "analyticsInfluxDbEndpoint": "influxdb:8086",
+    "analyticsInfluxDbEndpoint": "influx:8086",
     "analyticsInfluxDbDatabase": "chronicle_analytics",
-    "analyticsInfluxDbUsername": "admin",
-    "analyticsInfluxDbPassword": "admin",
+    "analyticsInfluxDbUsername": "root",
+    "analyticsInfluxDbPassword": "password",
     "tokenRegistryEndpoint": "https://token-registry.iota.org"
 }
