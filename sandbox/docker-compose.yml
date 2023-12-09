@@ -456,9 +456,11 @@ services:
         max_attempts: 3
     stop_grace_period: 5m
     ports:
-      - "8080:80"
+      - "${EXPLORER_PORT:-8081}:80"
     volumes:
       - "./assets/explorer/.env.js:/usr/src/app/build/env.js:ro"
+    profiles:
+      - explorer
 
   explorer-api:
     container_name: explorer-api
@@ -481,6 +483,8 @@ services:
     volumes:
       - "./assets/explorer/local-storage:/app/data/.local-storage"
       - "./assets/explorer/config.local.json:/usr/src/app/dist/data/config.local.json"
+    profiles:
+      - explorer
 
 ##################################################################
 #  Core                                                          #
