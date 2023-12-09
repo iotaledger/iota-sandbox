@@ -11,7 +11,6 @@
     "analyticsInfluxDbUsername": "root",
     "analyticsInfluxDbPassword": "password",
     "feedEndpoint": "mqtt://inx-mqtt:1883",
-    "tokenRegistryEndpoint": "https://token-registry.iota.org",
     "bechHrp": "snd",
     "isEnabled": true,
     "isHidden": false,
