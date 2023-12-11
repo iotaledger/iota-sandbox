@@ -389,6 +389,26 @@ services:
       - wasp
 
 ##################################################################
+#  EVM Toolkit                                                   #
+##################################################################
+
+  evm-toolkit:
+    container_name: evm-toolkit
+    image: drelectron/evm-toolkit:latest
+    stop_grace_period: 5m
+    restart: unless-stopped
+    depends_on:
+      wasp:
+        condition: service_healthy
+    ports:
+      - "${TOOLKIT_PORT:-8082}:80"
+    volumes:
+      - ./evm-toolkit/networks.json.json:/app/networks.json:ro
+    profiles:
+      - wasp
+      - toolkit
+
+##################################################################
 #  Chronicle                                                     #
 ##################################################################
 
