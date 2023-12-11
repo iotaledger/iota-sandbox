@@ -402,6 +402,9 @@ services:
         condition: on-failure
         delay: 5s
         max_attempts: 3
+    depends_on:
+      hornet:
+        condition: service_healthy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.chronicle.service=chronicle"
@@ -414,8 +417,7 @@ services:
       - "--mongodb-conn-str=mongodb://mongo:27017"
       - "--influxdb-url=http://influx:8086"
       - "--inx-url=http://hornet:9029"
-      - "--jwt-password=c4a3fcd2ebec3ac0d105411653284efa9c636e754b9fbbaf58b3adcb974f3655"
-      - "--jwt-salt=11ed024b8f74191c8484579db15623435c994ae4c28d9ad1b2ad8c1807bf7469"
+      - "--public-route=*"
 
   mongo:
     image: mongo:latest
