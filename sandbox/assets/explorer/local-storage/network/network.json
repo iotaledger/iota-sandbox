@@ -1,0 +1,22 @@
+{
+    "network": "custom",
+    "protocolVersion": "stardust",
+    "label": "Sandnet",
+    "description": "Network. This network makes no guarantees of its stability.",
+    "provider": "http://hornet:14265",
+    "permaNodeEndpoint": "http://chronicle:8042",
+    "analyticsInfluxDbProtocol": "http",
+    "analyticsInfluxDbEndpoint": "influx:8086",
+    "analyticsInfluxDbDatabase": "chronicle_analytics",
+    "analyticsInfluxDbUsername": "root",
+    "analyticsInfluxDbPassword": "password",
+    "feedEndpoint": "mqtt://inx-mqtt:1883",
+    "bechHrp": "snd",
+    "isEnabled": true,
+    "isHidden": false,
+    "showMarket": false,
+    "uiTheme": "iota_ui",
+    "milestoneInterval": 5,
+    "circulatingSupply": 4600000000000000,
+    "disableApiFallback": false
+}
