@@ -394,7 +394,7 @@ services:
 
   evm-toolkit:
     container_name: evm-toolkit
-    image: drelectron/evm-toolkit:latest
+    image: iotaledger/evm-toolkit:latest
     stop_grace_period: 5m
     restart: unless-stopped
     depends_on:
