@@ -566,6 +566,8 @@ services:
       - "--chain=glass-chain"
       - "--evm-chainid=777"
       - "--block-keep-amount=10000"
+    profiles:
+      - bootstrap-chain
 
 networks:
   default:
