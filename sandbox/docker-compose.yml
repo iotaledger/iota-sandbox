@@ -403,7 +403,7 @@ services:
     ports:
       - "${TOOLKIT_PORT:-8082}:80"
     volumes:
-      - ./evm-toolkit/networks.json.json:/app/networks.json:ro
+      - ./assets/evm-toolkit/networks.json:/usr/share/nginx/html/networks.json:ro
     profiles:
       - wasp
       - toolkit
