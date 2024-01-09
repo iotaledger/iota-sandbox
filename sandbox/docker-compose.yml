@@ -340,7 +340,7 @@ services:
 
   wasp:
     container_name: wasp
-    image: iotaledger/wasp:1.0-rc
+    image: drelectron/wasp:1.0-rc
     stop_grace_period: 5m
     restart: unless-stopped
     depends_on:
@@ -545,6 +545,26 @@ services:
       - "--cooStatePath=state/coordinator.state"
     profiles:
       - bootstrap
+
+##################################################################
+#  Bootstrap EVM chain                                           #
+##################################################################
+
+  bootstrap-chain:
+    container_name: bootstrap-chain
+    image: drelectron/wasp:1.0-rc
+    volumes:
+      - ./assets/wasp-cli/config.json:/app/wasp-cli.json
+    entrypoint: /app/wasp-cli
+    depends_on:
+      wasp:
+        condition: service_healthy
+    command:
+      - "chain" 
+      - "deploy"
+      - "--chain=glass-chain"
+      - "--evm-chainid=777"
+      - "--block-keep-amount=10000"
 
 networks:
   default:

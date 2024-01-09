@@ -1,0 +1,12 @@
+{
+  "l1": {
+    "apiaddress": "http://hornet:14265",
+    "faucetaddress": "http://inx-faucet:8091"
+  },
+  "wallet": {
+    "seed": "0x44a427dbbd6a5739be99dd8bd3dc178dd4b9b40d23c90a3d0de3b6da25416bff"
+  },
+  "wasp": {
+    "mr-glass": "http://wasp:9090"
+  }
+}
