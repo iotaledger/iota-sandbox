@@ -363,6 +363,7 @@ services:
       - "--inx.address=hornet:9029"
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=wasp:9312"
+      - "--webapi.auth.scheme=none"
     profiles:
       - wasp
 
