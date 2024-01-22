@@ -8,26 +8,33 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag_prefix: ['iota', 'shimmer', 'testnet']
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        if: startsWith(github.ref_name, matrix.tag_prefix)
+        uses: actions/checkout@v4
 
       - name: Find and Replace VERSION
-        uses: jacobtomlinson/gha-find-replace@v2
+        if: startsWith(github.ref_name, matrix.tag_prefix)
+        uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "__VERSION__"
           replace: ${{ github.ref_name }}
           regex: false
 
-      - name: Create iota-sandbox_stardust.tar.gz
+      - name: Create ${{ matrix.tag_prefix }}_sandbox.tar.gz
+        if: startsWith(github.ref_name, matrix.tag_prefix)
         uses: ihiroky/archive-action@v1
         with:
-          root_dir: stardust
-          file_path: iota-sandbox_stardust.tar.gz
+          root_dir: ${{ matrix.tag_prefix }}
+          file_path: ${{ matrix.tag_prefix }}_sandbox.tar.gz
 
-      - name: Upload iota-sandbox_stardust.tar.gz file
-        uses: Shopify/upload-to-release@v1.0.1
+      - name: Upload ${{ matrix.tag_prefix }}_sandbox.tar.gz file
+        if: startsWith(github.ref_name, matrix.tag_prefix)
+        uses: Shopify/upload-to-release@v2.0.0
         with:
-          name: iota-sandbox_stardust-${{ github.ref_name }}.tar.gz
-          path: iota-sandbox_stardust.tar.gz
+          name: ${{ github.ref_name }}_sandbox.tar.gz
+          path: ${{ matrix.tag_prefix }}_sandbox.tar.gz
           repo-token: ${{ secrets.GITHUB_TOKEN }}
