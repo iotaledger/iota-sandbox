@@ -1,0 +1,13 @@
+{
+    "version": 2,
+    "networkName": "sandbox1",
+    "bech32HRP": "snd",
+    "minPoWScore": 0,
+    "belowMaxDepth": 15,
+    "rentStructure": {
+      "vByteCost": 500,
+      "vByteFactorData": 1,
+      "vByteFactorKey": 10
+    },
+    "tokenSupply": "4600000000000000"
+  }
