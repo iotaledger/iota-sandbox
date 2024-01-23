@@ -8,33 +8,26 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        tag_prefix: ['iota', 'shimmer', 'testnet']
     steps:
       - name: Check out code
-        if: startsWith(github.ref_name, matrix.tag_prefix)
         uses: actions/checkout@v4
 
       - name: Find and Replace VERSION
-        if: startsWith(github.ref_name, matrix.tag_prefix)
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "__VERSION__"
           replace: ${{ github.ref_name }}
           regex: false
 
-      - name: Create ${{ matrix.tag_prefix }}_sandbox.tar.gz
-        if: startsWith(github.ref_name, matrix.tag_prefix)
+      - name: Create iota_sandbox.tar.gz
         uses: ihiroky/archive-action@v1
         with:
-          root_dir: ${{ matrix.tag_prefix }}
-          file_path: ${{ matrix.tag_prefix }}_sandbox.tar.gz
+          root_dir: sandbox
+          file_path: iota_sandbox.tar.gz
 
-      - name: Upload ${{ matrix.tag_prefix }}_sandbox.tar.gz file
-        if: startsWith(github.ref_name, matrix.tag_prefix)
+      - name: Upload iota_sandbox.tar.gz file
         uses: Shopify/upload-to-release@v2.0.0
         with:
-          name: ${{ github.ref_name }}_sandbox.tar.gz
-          path: ${{ matrix.tag_prefix }}_sandbox.tar.gz
+          name: iota_sandbox.tar.gz
+          path: iota_sandbox.tar.gz
           repo-token: ${{ secrets.GITHUB_TOKEN }}
