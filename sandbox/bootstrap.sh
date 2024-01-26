@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#
+# iota-sandbox __VERSION__
+# https://github.com/iotaledger/iota-sandbox
+#
+
 if [[ "$OSTYPE" != "darwin"* && "$EUID" -ne 0 ]]; then
   echo "Please run as root or with sudo"
   exit
