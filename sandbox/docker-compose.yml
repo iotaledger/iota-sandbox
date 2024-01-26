@@ -340,7 +340,7 @@ services:
 
   wasp:
     container_name: wasp
-    image: drelectron/wasp:1.0-rc
+    image: iotaledger/wasp:1.0-alpha
     stop_grace_period: 5m
     restart: unless-stopped
     depends_on:
@@ -369,7 +369,7 @@ services:
 
   wasp-dashboard:
     container_name: wasp-dashboard
-    image: iotaledger/wasp-dashboard:latest
+    image: iotaledger/wasp-dashboard:0.1
     stop_grace_period: 5m
     restart: unless-stopped
     depends_on:
@@ -553,7 +553,7 @@ services:
 
   bootstrap-chain:
     container_name: bootstrap-chain
-    image: drelectron/wasp:1.0-rc
+    image: iotaledger/wasp:1.0-alpha
     volumes:
       - ./assets/wasp-cli/config.json:/app/wasp-cli.json
     entrypoint: /app/wasp-cli
