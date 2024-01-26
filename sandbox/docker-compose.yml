@@ -553,7 +553,7 @@ services:
 
   bootstrap-chain:
     container_name: bootstrap-chain
-    image: iotaledger/wasp:1.0-alpha
+    image: iotaledger/sandbox-wasp-cli:1.0-alpha
     volumes:
       - ./assets/wasp-cli/config.json:/app/wasp-cli.json
     entrypoint: /app/wasp-cli

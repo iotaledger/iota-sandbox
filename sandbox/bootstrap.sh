@@ -41,3 +41,7 @@ cp -R data/snapshots/hornet data/snapshots/hornet-1
 if [[ "$OSTYPE" != "darwin"* ]]; then
   chown -R 65532:65532 data
 fi
+
+# Bootstrap chain
+docker compose --profile wasp,bootstrap-chain up -d
+docker compose --profile wasp,bootstrap-chain down
