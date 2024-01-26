@@ -43,5 +43,8 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
 fi
 
 # Bootstrap chain
-docker compose --profile wasp --profile bootstrap-chain up -d
+echo "Bootstrap chain..."
+docker compose --profile wasp --profile bootstrap-chain up -d && docker compose logs bootstrap-chain -f
+echo "Bootstrap chain done. Cleaning up..."
 docker compose --profile wasp --profile bootstrap-chain down
+echo "Cleanup done, run docker compose up -d to start the network."
