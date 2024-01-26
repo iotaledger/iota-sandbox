@@ -458,6 +458,54 @@ services:
       - ./assets/influxdb/init.iql:/docker-entrypoint-initdb.d/influx_init.iql
 
 ##################################################################
+#  Explorer                                                      #
+##################################################################
+
+  explorer-webapp:
+    container_name: explorer-webapp
+    image: iotaledger/explorer-client:c7af50a
+    ulimits:
+      nofile:
+        soft: 8192
+        hard: 8192
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    stop_grace_period: 5m
+    ports:
+      - "${EXPLORER_PORT:-8081}:80"
+    volumes:
+      - "./assets/explorer/.env.js:/usr/src/app/build/env.js:ro"
+    profiles:
+      - explorer
+
+  explorer-api:
+    container_name: explorer-api
+    image: iotaledger/explorer-api:c7af50a
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    depends_on:
+      hornet:
+        condition: service_healthy
+    ulimits:
+      nofile:
+        soft: 8192
+        hard: 8192
+    stop_grace_period: 1s
+    ports:
+      - "4000:4000"
+    volumes:
+      - "./assets/explorer/local-storage:/app/data/.local-storage"
+      - "./assets/explorer/config.local.json:/usr/src/app/dist/data/config.local.json"
+    profiles:
+      - explorer
+
+##################################################################
 #  Core                                                          #
 #  This section contains bootstraping tools and a component      #
 #  that should not be modified. It is recommended to leave       #

@@ -1,0 +1,7 @@
+{
+    "rootStorageFolder": "/app/data/.local-storage",
+    "verboseLogging": true,
+    "allowedDomains": [
+        "*"
+    ]
+}
