@@ -32,6 +32,7 @@ mkdir -p data/snapshots/hornet
 
 if [[ "$OSTYPE" != "darwin"* ]]; then
   chown -R 65532:65532 data
+  chown -R 65532:65532 assets/wasp-cli
 fi
 
 # Create snapshot
