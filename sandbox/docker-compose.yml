@@ -622,6 +622,24 @@ services:
     profiles:
       - bootstrap-chain
 
+  fund-chain-account:
+    container_name: fund-chain-account
+    image: iotaledger/sandbox-wasp-cli:1.0-alpha
+    volumes:
+      - ./assets/wasp-cli/config.json:/app/wasp-cli.json
+    entrypoint: /app/wasp-cli
+    depends_on:
+      wasp:
+        condition: service_healthy
+    command:
+      - "chain" 
+      - "deposit"
+      - "0xb62ea087c36eBd77Fb58174Ae162395722dE9Cb0"
+      - "base:10000000"
+      - "-s"
+    profiles:
+      - fund-chain-account
+
 networks:
   default:
     ipam:

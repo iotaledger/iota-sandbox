@@ -54,6 +54,10 @@ docker compose --profile wasp --profile bootstrap-chain up -d && docker compose 
 echo "Configuring toolkit..."
 chain_address=$(jq -r '.chains."glass-chain"' assets/wasp-cli/config.json)
 sed -i'.bak' -e "s/<chainAddress>/$chain_address/g" assets/evm-toolkit/networks.json
-echo "Bootstrap chain done. Cleaning up..."
+echo "Bootstrap chain done."
+echo "Funding chain account..."
 docker compose --profile wasp --profile bootstrap-chain down
+docker compose --profile wasp --profile fund-chain-account up -d && docker compose logs fund-chain-account -f
+echo "Funding chain done. Cleaning up..."
+docker compose --profile wasp --profile fund-chain-account down
 echo "Cleanup done, run docker compose up -d to start the network."
