@@ -36,6 +36,8 @@ services:
       - "traefik.http.middlewares.redirect-dashboard.redirectregex.permanent=true"
     cap_drop:
       - ALL
+    ports:
+      - "${INX_PORT:-9029}:9029"
     volumes:
       - ./config_sandbox.json:/app/config.json:ro
       - ./data/sandboxdb/hornet:/app/data/sandboxdb
@@ -261,34 +263,34 @@ services:
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=inx-dashboard:9312"
 
-  inx-faucet:
-    container_name: inx-faucet
-    image: iotaledger/inx-faucet:1.0
-    depends_on:
-      hornet:
-        condition: service_healthy
-      inx-indexer:
-        condition: service_started
-    restart: on-failure
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.faucet.service=faucet"
-      - "traefik.http.routers.faucet.rule=Host(`localhost`) && PathPrefix(`/faucet`)"
-      - "traefik.http.routers.faucet.entrypoints=web"
-      - "traefik.http.services.faucet.loadbalancer.server.port=8091"
-      - "traefik.http.routers.faucet.middlewares=rewrite-faucet"
-      - "traefik.http.middlewares.rewrite-faucet.stripprefix.prefixes=/faucet"
-    environment:
-      - "FAUCET_PRV_KEY=12f3d01e4015e93fbd9e3f01d47bb7fe75f1fd1ea55077498b45ebba986e1a1acee0c2e1dbe99147724ce481340bcd2389890e6e528feeed4e1f4a3d68e8ac39"
-    command:
-      - "--inx.address=hornet:9029"
-      - "--faucet.bindAddress=inx-faucet:8091"
-      - "--faucet.amount=100000000000"
-      - "--faucet.smallAmount=10000000000"
-      - "--faucet.maxAddressBalance=200000000000"
-      - "--faucet.rateLimit.enabled=false"
-      - "--profiling.enabled=true"
-      - "--profiling.bindAddress=inx-faucet:6060"
+  #inx-faucet:
+  #  container_name: inx-faucet
+  #  image: iotaledger/inx-faucet:1.0
+  #  depends_on:
+  #    hornet:
+  #      condition: service_healthy
+  #    inx-indexer:
+  #      condition: service_started
+  #  restart: on-failure
+  #  labels:
+  #    - "traefik.enable=true"
+  #    - "traefik.http.routers.faucet.service=faucet"
+  #    - "traefik.http.routers.faucet.rule=Host(`localhost`) && PathPrefix(`/faucet`)"
+  #    - "traefik.http.routers.faucet.entrypoints=web"
+  #    - "traefik.http.services.faucet.loadbalancer.server.port=8091"
+  #    - "traefik.http.routers.faucet.middlewares=rewrite-faucet"
+  #    - "traefik.http.middlewares.rewrite-faucet.stripprefix.prefixes=/faucet"
+  #  environment:
+  #    - "FAUCET_PRV_KEY=12f3d01e4015e93fbd9e3f01d47bb7fe75f1fd1ea55077498b45ebba986e1a1acee0c2e1dbe99147724ce481340bcd2389890e6e528feeed4e1f4a3d68e8ac39"
+  #  command:
+  #    - "--inx.address=hornet:9029"
+  #    - "--faucet.bindAddress=inx-faucet:8091"
+  #    - "--faucet.amount=100000000000"
+  #    - "--faucet.smallAmount=10000000000"
+  #    - "--faucet.maxAddressBalance=200000000000"
+  #    - "--faucet.rateLimit.enabled=false"
+  #    - "--profiling.enabled=true"
+  #    - "--profiling.bindAddress=inx-faucet:6060"
 
 ##################################################################
 #  Historic Data                                                 #
