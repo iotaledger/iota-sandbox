@@ -464,7 +464,7 @@ services:
 
   explorer-webapp:
     container_name: explorer-webapp
-    image: iotaledger/explorer-client:c7af50a
+    image: iotaledger/explorer-client:v3.3.3
     ulimits:
       nofile:
         soft: 8192
@@ -484,7 +484,7 @@ services:
 
   explorer-api:
     container_name: explorer-api
-    image: iotaledger/explorer-api:c7af50a
+    image: iotaledger/explorer-api:v3.3.3
     deploy:
       restart_policy:
         condition: on-failure
