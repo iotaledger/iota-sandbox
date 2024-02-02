@@ -574,8 +574,8 @@ services:
       - "tool"
       - "snap-gen"
       - "--protocolParametersPath=/app/protocol_parameters.json"
-      - "--mintAddress=snd1qq2kvnu9pqzptkggrpqrvltvagccsh6aj2fkdhla7p3lrsy9dwhdzpu0epw"
-      - "--genesisAddresses=snd1qpszqzadsym6wpppd6z037dvlejmjuke7s24hm95s9fg9vpua7vluuwu49a:1000000000000,snd1qqweu75ldpyann5jsthqsa6m0thx4tmqxncj6uqxf5q974pmqx30yfng7ya:1000000000000,snd1qqrku7yz0wd87v20qxnd7hyzunjpt36jckk5t227k93e5rhzhtqlxwk4qsu:1000000000000"
+      - "--mintAddress=snd1qzu4rgaqaymc7udxfm23urh98xr2yy4cezlmpsc7808v0skahdvax882xtm"
+      - "--genesisAddresses=snd1qqx6kw52j70ed3mr5pukt048kya86vnxp33d3czvhpp9r6rvljg922ksxeq:1000000000000,snd1qre96hg2vhuzr7apqxeqtp8cs66ndfcjx0sdhpgr6xlhfeh0a2hzj2zmcll:1000000000000,snd1qqrku7yz0wd87v20qxnd7hyzunjpt36jckk5t227k93e5rhzhtqlxwk4qsu:1000000000000"
       - "--outputPath=data/snapshots/hornet/full_snapshot.bin"
     profiles:
       - snapshots
