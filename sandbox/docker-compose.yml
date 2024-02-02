@@ -345,7 +345,7 @@ services:
 
   wasp:
     container_name: wasp
-    image: iotaledger/wasp:1.0-rc
+    image: iotaledger/wasp:1.0-alpha
     stop_grace_period: 5m
     restart: unless-stopped
     depends_on:
@@ -368,12 +368,13 @@ services:
       - "--inx.address=hornet:9029"
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=wasp:9312"
+      - "--webapi.auth.scheme=none"
     profiles:
       - wasp
 
   wasp-dashboard:
     container_name: wasp-dashboard
-    image: iotaledger/wasp-dashboard:latest
+    image: iotaledger/wasp-dashboard:0.1
     stop_grace_period: 5m
     restart: unless-stopped
     depends_on:
@@ -574,7 +575,7 @@ services:
       - "snap-gen"
       - "--protocolParametersPath=/app/protocol_parameters.json"
       - "--mintAddress=snd1qq2kvnu9pqzptkggrpqrvltvagccsh6aj2fkdhla7p3lrsy9dwhdzpu0epw"
-      - "--genesisAddresses=snd1qpszqzadsym6wpppd6z037dvlejmjuke7s24hm95s9fg9vpua7vluuwu49a:2000000000000,snd1qqweu75ldpyann5jsthqsa6m0thx4tmqxncj6uqxf5q974pmqx30yfng7ya:1000000000000"
+      - "--genesisAddresses=snd1qpszqzadsym6wpppd6z037dvlejmjuke7s24hm95s9fg9vpua7vluuwu49a:1000000000000,snd1qqweu75ldpyann5jsthqsa6m0thx4tmqxncj6uqxf5q974pmqx30yfng7ya:1000000000000,snd1qqrku7yz0wd87v20qxnd7hyzunjpt36jckk5t227k93e5rhzhtqlxwk4qsu:1000000000000"
       - "--outputPath=data/snapshots/hornet/full_snapshot.bin"
     profiles:
       - snapshots
@@ -598,6 +599,28 @@ services:
       - "--cooStatePath=state/coordinator.state"
     profiles:
       - bootstrap
+
+##################################################################
+#  Bootstrap EVM chain                                           #
+##################################################################
+
+  bootstrap-chain:
+    container_name: bootstrap-chain
+    image: iotaledger/sandbox-wasp-cli:1.0-alpha
+    volumes:
+      - ./assets/wasp-cli/config.json:/app/wasp-cli.json
+    entrypoint: /app/wasp-cli
+    depends_on:
+      wasp:
+        condition: service_healthy
+    command:
+      - "chain" 
+      - "deploy"
+      - "--chain=glass-chain"
+      - "--evm-chainid=777"
+      - "--block-keep-amount=10000"
+    profiles:
+      - bootstrap-chain
 
 networks:
   default:
