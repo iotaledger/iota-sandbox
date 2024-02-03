@@ -412,9 +412,8 @@ services:
     ports:
       - "${TOOLKIT_PORT:-8082}:80"
     volumes:
-      - ./assets/evm-toolkit/networks.json:/usr/share/nginx/html/networks.json:ro
+      - ./data/sandboxdb/evm-toolkit/networks.json:/usr/share/nginx/html/networks.json:ro
     profiles:
-      - wasp
       - toolkit
 
 ##################################################################
@@ -611,7 +610,7 @@ services:
     container_name: bootstrap-chain
     image: iotaledger/sandbox-wasp-cli:1.0-alpha
     volumes:
-      - ./assets/wasp-cli/config.json:/app/wasp-cli.json
+      - ./data/sandboxdb/wasp-cli/config.json:/app/wasp-cli.json
     entrypoint: /app/wasp-cli
     depends_on:
       wasp:
@@ -629,7 +628,7 @@ services:
     container_name: fund-chain-account
     image: iotaledger/sandbox-wasp-cli:1.0-alpha
     volumes:
-      - ./assets/wasp-cli/config.json:/app/wasp-cli.json
+      - ./data/sandboxdb/wasp-cli/config.json:/app/wasp-cli.json
     entrypoint: /app/wasp-cli
     depends_on:
       bootstrap-chain:
