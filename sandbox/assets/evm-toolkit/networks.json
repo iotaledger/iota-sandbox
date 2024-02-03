@@ -2,11 +2,11 @@
     {
         "id": 0,
         "text": "Sandnet EVM",
-        "apiEndpoint": "http://localhost",
-        "faucetEndpoint": "http://localhost/faucet",
+        "apiEndpoint": "http://localhost:<httpPort>",
+        "faucetEndpoint": "http://localhost:<httpPort>/faucet",
         "chainAddress": "<chainAddress>",
         "chainID": 777,
         "blockExplorer": "",
-        "networkUrl": "http://localhost/wasp/api/v1/chains/<chainAddress>/evm"
+        "networkUrl": "http://localhost:<httpPort>/wasp/api/v1/chains/<chainAddress>/evm"
     }
 ]
