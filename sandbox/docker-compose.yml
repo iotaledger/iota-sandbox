@@ -636,7 +636,7 @@ services:
     command:
       - "chain" 
       - "deposit"
-      - "0xb62ea087c36eBd77Fb58174Ae162395722dE9Cb0"
+      - "0xdfd94ab7d15eece895f87e34712ee4f8ea75c3af"
       - "base:777777777"
       - "-s"
     profiles:
