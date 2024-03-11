@@ -1,0 +1,57 @@
+name: 'iota-sandbox-setup'
+description: 'Setup IOTA Sandbox'
+inputs:
+  version:
+    description: 'Sandbox Version to use'
+    required: true
+    default: 'latest'
+  branch:
+    description: 'branch/tag/commit to use'
+    required: true
+    default: ''
+runs:
+  using: "composite"
+  steps:
+    - name: Test Print
+      run: echo TEST
+    - name: Setup iota sandbox using release version
+      shell: bash
+      if: ${{ inputs.version != '' }}
+      run: |
+        mkdir iota-sandbox
+        cd iota-sandbox
+        mkdir sandbox
+        cd sandbox
+        # Use the output of https://api.github.com/repos/iotaledger/iota-sandbox/releases/
+        if [[ "${{ inputs.version }}" == "latest" ]]; then
+          DOWNLOAD_URL=$(curl "https://api.github.com/repos/iotaledger/iota-sandbox/releases/latest" | jq -r '.assets[] | select(.name | contains("iota_sandbox")) | .browser_download_url')
+        else
+          DOWNLOAD_URL=$(curl "https://api.github.com/repos/iotaledger/iota-sandbox/releases/tags/${{ inputs.version }}" | jq -r '.assets[] | select(.name | contains("iota_sandbox")) | .browser_download_url')
+        fi
+        echo "Downloading sandbox from $DOWNLOAD_URL"
+        curl -L -o iota_sandbox.tar.gz $DOWNLOAD_URL
+        tar -xf iota_sandbox.tar.gz
+
+        # Start Tangle
+        sudo ./bootstrap.sh
+        docker compose up -d
+    - name: Setup iota sandbox using gitish version
+      shell: bash
+      if: ${{ inputs.branch != '' }}
+      run: |
+        git clone https://github.com/iotaledger/iota-sandbox --branch ${{ inputs.branch }}
+        cd iota-sandbox/sandbox
+
+        # Start Tangle
+        sudo ./bootstrap.sh
+        docker compose up -d
+    - name: Wait for tangle to start
+      shell: bash
+      run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- -t 60 http://localhost/health -- echo "Tangle is up"
+      env:
+        WAIT_FOR_VERSION: d48601a8a90c3d22fade68d09b4240739fb44a46 # v2.2.4
+    - name: Wait for faucet to start
+      shell: bash
+      run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- -t 60 http://localhost/faucet/api/info -- echo "Faucet is up"
+      env:
+        WAIT_FOR_VERSION: d48601a8a90c3d22fade68d09b4240739fb44a46 # v2.2.4
