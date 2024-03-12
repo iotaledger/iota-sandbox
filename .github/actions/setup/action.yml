@@ -6,7 +6,7 @@ inputs:
     required: false
     default: 'latest'
   branch:
-    description: 'branch/tag/commit to use'
+    description: 'Branch/tag/commit to use'
     required: false
     default: ''
 runs:
