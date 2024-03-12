@@ -14,7 +14,7 @@ runs:
   steps:
     - name: Setup iota sandbox using release version
       shell: bash
-      if: ${{ inputs.version != '' }}
+      if: ${{ inputs.version != '' && inputs.branch == '' }}
       run: |
         mkdir iota-sandbox
         cd iota-sandbox
