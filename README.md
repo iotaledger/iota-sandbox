@@ -56,7 +56,7 @@
       <a href="#about-the-project">About The Project</a>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#github-action">Github Action</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
   </ol>
@@ -88,16 +88,40 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 
 
-<!-- ROADMAP -->
-## Roadmap
+<!-- GITHUB ACTION -->
+## Github Action
 
-- [ ] Add Explorer
-- [x] Add Chronicle
-- [ ] Add Faucet
-    - [x] L1
-    - [ ] L2
+The IOTA Sandbox provides two actions to use the sandbox in CI/CD for testing. `setup` and `tear-down`.
 
-See the [open issues](https://github.com/iotaledger/iota-sandbox/issues) for a full list of proposed features (and known issues).
+### Usage
+
+You can add those actions to your workflow by simply using it in a step. You can specify a version of the sandbox to use, or a commit-ish ref, to use any commit, branch or tag.
+
+```yml
+name: Sandbox
+
+on:
+  workflow-dispatch
+
+env:
+  # Specify which profiles you want to enable.
+  COMPOSE_PROFILES: 'inx-indexer, chronicle'
+
+jobs:
+  sandbox:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start iota sandbox
+        uses: 'iotaledger/iota-sandbox/.github/actions/setup@VERION'
+        with:
+          # Specify a iota-sandbox version.
+          version: 'v1.1.0'
+          # In case you want to use a commit-ish ref, set version to '' and specify a commit-ish ref
+          branch: branch-xy
+
+      - name: Tear down iota sandbox
+        uses: 'iotaledger/iota-sandbox/.github/actions/setup@VERSION'
+```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
