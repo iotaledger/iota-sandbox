@@ -140,8 +140,6 @@ services:
 
   mongodb-exporter:
     image: percona/mongodb_exporter:0.34
-    profiles:
-      - metrics
     depends_on:
       - mongo
     container_name: mongodb-exporter
@@ -154,6 +152,8 @@ services:
       - "--log.level=info"
       - "--discovering-mode"
       - "--collect-all"
+    profiles:
+      - monitoring
 
 ##################################################################
 #  INX Extensions                                                #
@@ -175,6 +175,9 @@ services:
       - "--restAPI.bindAddress=inx-indexer:9091"
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=inx-indexer:9312"
+    profiles:
+      - inx
+      - inx-indexer
 
   inx-mqtt:
     container_name: inx-mqtt
@@ -189,6 +192,9 @@ services:
       - "--mqtt.websocket.bindAddress=inx-mqtt:1888"
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=inx-mqtt:9312"
+    profiles:
+      - inx
+      - inx-mqtt
 
   inx-participation:
     container_name: inx-participation
@@ -207,6 +213,9 @@ services:
     command:
       - "--inx.address=hornet:9029"
       - "--restAPI.bindAddress=inx-participation:9892"
+    profiles:
+      - inx
+      - inx-participation
 
   inx-spammer:
     container_name: inx-spammer
@@ -225,6 +234,9 @@ services:
       - "--restAPI.bindAddress=inx-spammer:9092"
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=inx-spammer:9312"
+    profiles:
+      - inx
+      - inx-spammer
 
   inx-poi:
     container_name: inx-poi
@@ -237,6 +249,9 @@ services:
     command:
       - "--inx.address=hornet:9029"
       - "--restAPI.bindAddress=inx-poi:9687"
+    profiles:
+      - inx
+      - inx-poi
 
   inx-dashboard:
     container_name: inx-dashboard
@@ -262,6 +277,9 @@ services:
       - "--dashboard.auth.passwordSalt=11ed024b8f74191c8484579db15623435c994ae4c28d9ad1b2ad8c1807bf7469"
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=inx-dashboard:9312"
+    profiles:
+      - inx
+      - inx-dashboard
 
   inx-faucet:
     container_name: inx-faucet
@@ -291,6 +309,9 @@ services:
       - "--faucet.rateLimit.enabled=false"
       - "--profiling.enabled=true"
       - "--profiling.bindAddress=inx-faucet:6060"
+    profiles:
+      - inx
+      - inx-faucet
 
 ##################################################################
 #  Historic Data                                                 #
@@ -374,6 +395,7 @@ services:
       - "--webapi.auth.scheme=none"
     profiles:
       - wasp
+      - wasp-node
 
   wasp-dashboard:
     container_name: wasp-dashboard
@@ -396,6 +418,7 @@ services:
       - L1_API_URL=http://localhost:${HTTP_PORT:-80}
     profiles:
       - wasp
+      - wasp-dashboard
 
 ##################################################################
 #  EVM Toolkit                                                   #
@@ -444,6 +467,8 @@ services:
       - "--influxdb-url=http://influx:8086"
       - "--inx-url=http://hornet:9029"
       - "--public-route=*"
+    profiles:
+      - chronicle
 
   mongo:
     image: mongo:latest
@@ -452,6 +477,8 @@ services:
     command: ["--quiet", "--logpath", "/dev/null"]
     volumes:
       - ./data/sandboxdb/chronicle/mongodb:/data/db
+    profiles:
+      - chronicle
 
   influx:
     image: influxdb:1.8
@@ -459,6 +486,8 @@ services:
     volumes:
       - ./data/sandboxdb/chronicle/influxdb:/var/lib/influxdb
       - ./assets/influxdb/init.iql:/docker-entrypoint-initdb.d/influx_init.iql
+    profiles:
+      - chronicle
 
 ##################################################################
 #  Explorer                                                      #
