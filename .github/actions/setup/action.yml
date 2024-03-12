@@ -3,11 +3,11 @@ description: 'Setup IOTA Sandbox'
 inputs:
   version:
     description: 'Sandbox Version to use'
-    required: true
+    required: false
     default: 'latest'
   branch:
     description: 'branch/tag/commit to use'
-    required: true
+    required: false
     default: ''
 runs:
   using: "composite"
