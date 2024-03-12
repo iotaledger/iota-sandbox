@@ -178,6 +178,10 @@ services:
     profiles:
       - inx
       - inx-indexer
+      # faucet, spammer snd wasp depent on indexer
+      - inx-faucet
+      - inx-spammer
+      - wasp
 
   inx-mqtt:
     container_name: inx-mqtt
