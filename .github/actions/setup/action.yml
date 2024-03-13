@@ -48,8 +48,3 @@ runs:
       run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- -t 60 http://localhost/health -- echo "Tangle is up"
       env:
         WAIT_FOR_VERSION: d48601a8a90c3d22fade68d09b4240739fb44a46 # v2.2.4
-    - name: Wait for faucet to start
-      shell: bash
-      run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- -t 60 http://localhost/faucet/api/info -- echo "Faucet is up"
-      env:
-        WAIT_FOR_VERSION: d48601a8a90c3d22fade68d09b4240739fb44a46 # v2.2.4
