@@ -9,7 +9,10 @@ inputs:
     description: 'Branch/tag/commit to use'
     required: false
   protocol_parameters:
-    decsription: 'Path to custom protocol parameters file'
+    description: 'Path to custom protocol parameters file'
+    required: false
+  milestone_interval:
+    description: 'Custom milestone interval'
     required: false
 runs:
   using: "composite"
@@ -50,14 +53,17 @@ runs:
       if: ${{ inputs.branch }}
       run: |
         git clone https://github.com/iotaledger/iota-sandbox --branch ${{ inputs.branch }}
-        cd iota-sandbox/sandbox
     - name: Overwrite protocol parameters
       shell: bash
       if: ${{ inputs.protocol_parameters }}
       run: |
-        ls
-        echo OVERWRITE
         cp -f ${{ inputs.protocol_parameters }} iota-sandbox/sandbox/protocol_parameters.json
+    - name: Change milestone interval
+      working-directory: iota-sandbox/sandbox
+      shell: bash
+      if: ${{ inputs.milestone_interval }}
+      run: |
+        yq eval '.services.inx-coordinator.command += "--coordinator.interval=${{ inputs.milestone_interval }}"' docker-compose.yml > tmp.yml && mv tmp.yml docker-compose.yml
     - name: Bootstrap and start sandbox
       working-directory: iota-sandbox/sandbox
       shell: bash
