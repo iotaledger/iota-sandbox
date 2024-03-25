@@ -32,6 +32,10 @@ mkdir -p data/snapshots/hornet
 mkdir -p data/sandboxdb/evm-toolkit
 mkdir -p data/sandboxdb/wasp-cli
 
+if [ ! -f data/sandboxdb/wasp/users.json ]; then
+  echo "{}" >> data/sandboxdb/wasp/users.json
+fi
+
 cp assets/wasp-cli/config.json data/sandboxdb/wasp-cli/config.json
 
 if [[ "$OSTYPE" != "darwin"* ]]; then

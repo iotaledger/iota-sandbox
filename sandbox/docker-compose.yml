@@ -372,6 +372,7 @@ services:
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=wasp:9312"
       - "--webapi.auth.scheme=none"
+      - "--users=/app/waspdb/users.json"
     profiles:
       - wasp
 
