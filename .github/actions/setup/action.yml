@@ -18,7 +18,6 @@ runs:
   using: "composite"
   steps:
     - name: Check if a faucet profile is enabled
-      id: faucet_check
       shell: bash
       run: |
         IFS=',' read -ra PROFILES <<< "${{ env.COMPOSE_PROFILES }}" # Split by ,
@@ -30,7 +29,7 @@ runs:
             break
           fi
         done
-        echo "::set-output name=is_faucet::${FAUCET_ENABLED}"
+        echo "FAUCET_ENABLED=$FAUCET_ENABLED" >> "$GITHUB_ENV"
     - name: Setup iota sandbox using release version
       shell: bash
       if: ${{ inputs.version && !inputs.branch }}
@@ -71,7 +70,7 @@ runs:
         sudo ./bootstrap.sh
         docker compose up -d
     - name: Wait for faucet to start
-      if: ${{ steps.faucet_check.outputs.is_faucet == 'true' }}
+      if: ${{ env.FAUCET_ENABLED == 'true' }}
       shell: bash
       run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- -t 60 http://localhost/faucet/api/info -- echo "Faucet is up"
       env:
