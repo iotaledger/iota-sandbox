@@ -199,6 +199,7 @@ services:
     profiles:
       - inx
       - inx-mqtt
+      - explorer
 
   inx-participation:
     container_name: inx-participation
@@ -316,6 +317,7 @@ services:
     profiles:
       - inx
       - inx-faucet
+      - toolkit
 
 ##################################################################
 #  Historic Data                                                 #
@@ -473,6 +475,7 @@ services:
       - "--public-route=*"
     profiles:
       - chronicle
+      - explorer
 
   mongo:
     image: mongo:latest
@@ -483,6 +486,7 @@ services:
       - ./data/sandboxdb/chronicle/mongodb:/data/db
     profiles:
       - chronicle
+      - explorer
 
   influx:
     image: influxdb:1.8
@@ -492,6 +496,7 @@ services:
       - ./assets/influxdb/init.iql:/docker-entrypoint-initdb.d/influx_init.iql
     profiles:
       - chronicle
+      - explorer
 
 ##################################################################
 #  Explorer                                                      #
