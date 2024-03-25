@@ -153,7 +153,7 @@ services:
       - "--discovering-mode"
       - "--collect-all"
     profiles:
-      - monitoring
+      - chronicle
 
 ##################################################################
 #  INX Extensions                                                #
@@ -317,7 +317,7 @@ services:
     profiles:
       - inx
       - inx-faucet
-      - toolkit
+      - evm-toolkit
 
 ##################################################################
 #  Historic Data                                                 #
@@ -439,11 +439,12 @@ services:
       wasp:
         condition: service_healthy
     ports:
-      - "${TOOLKIT_PORT:-8082}:80"
+      - "${EVM_TOOLKIT_PORT:-8082}:80"
     volumes:
       - ./data/sandboxdb/evm-toolkit/networks.json:/usr/share/nginx/html/networks.json:ro
     profiles:
-      - toolkit
+      - wasp
+      - evm-toolkit
 
 ##################################################################
 #  Chronicle                                                     #
