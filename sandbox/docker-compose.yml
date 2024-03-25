@@ -348,7 +348,7 @@ services:
 
   wasp:
     container_name: wasp
-    image: iotaledger/wasp:1.0-rc
+    image: iotaledger/wasp:1.0
     stop_grace_period: 5m
     restart: unless-stopped
     depends_on:
@@ -372,6 +372,7 @@ services:
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=wasp:9312"
       - "--webapi.auth.scheme=none"
+      - "--users=/app/waspdb/users.json"
     profiles:
       - wasp
 
@@ -608,7 +609,7 @@ services:
 
   bootstrap-chain:
     container_name: bootstrap-chain
-    image: iotaledger/sandbox-wasp-cli:1.0-rc
+    image: iotaledger/sandbox-wasp-cli:1.0
     volumes:
       - ./data/sandboxdb/wasp-cli/config.json:/app/wasp-cli.json
     entrypoint: /app/wasp-cli
@@ -626,7 +627,7 @@ services:
 
   fund-chain-account:
     container_name: fund-chain-account
-    image: iotaledger/sandbox-wasp-cli:1.0-rc
+    image: iotaledger/sandbox-wasp-cli:1.0
     volumes:
       - ./data/sandboxdb/wasp-cli/config.json:/app/wasp-cli.json
     entrypoint: /app/wasp-cli
