@@ -27,7 +27,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hornet.service=hornet"
-      - "traefik.http.routers.hornet.rule=Host(`localhost`)"
+      - "traefik.http.routers.hornet.rule=PathPrefix(`/`)"
       - "traefik.http.routers.hornet.entrypoints=web"
       - "traefik.http.services.hornet.loadbalancer.server.port=14265"
       - "traefik.http.routers.hornet.middlewares=redirect-dashboard"
@@ -124,7 +124,7 @@ services:
     user: "65532"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`localhost`) && PathPrefix(`/grafana`)"
+      - "traefik.http.routers.grafana.rule=PathPrefix(`/grafana`)"
       - "traefik.http.routers.grafana.entrypoints=web"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     environment:
@@ -249,7 +249,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hornet-dashboard.service=hornet-dashboard"
-      - "traefik.http.routers.hornet-dashboard.rule=Host(`localhost`) && PathPrefix(`/dashboard`)"
+      - "traefik.http.routers.hornet-dashboard.rule=PathPrefix(`/dashboard`)"
       - "traefik.http.routers.hornet-dashboard.entrypoints=web"
       - "traefik.http.services.hornet-dashboard.loadbalancer.server.port=8081"
     volumes:
@@ -275,7 +275,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.faucet.service=faucet"
-      - "traefik.http.routers.faucet.rule=Host(`localhost`) && PathPrefix(`/faucet`)"
+      - "traefik.http.routers.faucet.rule=PathPrefix(`/faucet`)"
       - "traefik.http.routers.faucet.entrypoints=web"
       - "traefik.http.services.faucet.loadbalancer.server.port=8091"
       - "traefik.http.routers.faucet.middlewares=rewrite-faucet"
@@ -359,7 +359,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.wasp-api.service=wasp-api"
-      - "traefik.http.routers.wasp-api.rule=Host(`localhost`) && PathPrefix(`/wasp/api`)"
+      - "traefik.http.routers.wasp-api.rule=PathPrefix(`/wasp/api`)"
       - "traefik.http.routers.wasp-api.entrypoints=web"
       - "traefik.http.services.wasp-api.loadbalancer.server.port=9090"
       - "traefik.http.routers.wasp-api.middlewares=rewrite-wasp-api"
@@ -387,7 +387,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.wasp-dashboard.service=wasp-dashboard"
-      - "traefik.http.routers.wasp-dashboard.rule=Host(`localhost`) && PathPrefix(`/wasp/dashboard`)"
+      - "traefik.http.routers.wasp-dashboard.rule=PathPrefix(`/wasp/dashboard`)"
       - "traefik.http.routers.wasp-dashboard.entrypoints=web"
       - "traefik.http.services.wasp-dashboard.loadbalancer.server.port=80"
       - "traefik.http.routers.wasp-dashboard.middlewares=rewrite-wasp-dashboard"
@@ -435,7 +435,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.chronicle.service=chronicle"
-      - "traefik.http.routers.chronicle.rule=Host(`localhost`) && PathPrefix(`/chronicle`)"
+      - "traefik.http.routers.chronicle.rule=PathPrefix(`/chronicle`)"
       - "traefik.http.routers.chronicle.entrypoints=web"
       - "traefik.http.services.chronicle.loadbalancer.server.port=8042"
       - "traefik.http.routers.chronicle.middlewares=rewrite-chronicle"
