@@ -153,7 +153,7 @@ services:
       - "--discovering-mode"
       - "--collect-all"
     profiles:
-      - monitoring
+      - chronicle
 
 ##################################################################
 #  INX Extensions                                                #
@@ -199,6 +199,7 @@ services:
     profiles:
       - inx
       - inx-mqtt
+      - explorer
 
   inx-participation:
     container_name: inx-participation
@@ -316,6 +317,7 @@ services:
     profiles:
       - inx
       - inx-faucet
+      - evm-toolkit
 
 ##################################################################
 #  Historic Data                                                 #
@@ -373,7 +375,7 @@ services:
 
   wasp:
     container_name: wasp
-    image: iotaledger/wasp:1.0-rc
+    image: iotaledger/wasp:1.0
     stop_grace_period: 5m
     restart: unless-stopped
     depends_on:
@@ -397,6 +399,7 @@ services:
       - "--prometheus.enabled=true"
       - "--prometheus.bindAddress=wasp:9312"
       - "--webapi.auth.scheme=none"
+      - "--users=/app/waspdb/users.json"
     profiles:
       - wasp
       - wasp-node
@@ -437,11 +440,12 @@ services:
       wasp:
         condition: service_healthy
     ports:
-      - "${TOOLKIT_PORT:-8082}:80"
+      - "${EVM_TOOLKIT_PORT:-8082}:80"
     volumes:
       - ./data/sandboxdb/evm-toolkit/networks.json:/usr/share/nginx/html/networks.json:ro
     profiles:
-      - toolkit
+      - wasp
+      - evm-toolkit
 
 ##################################################################
 #  Chronicle                                                     #
@@ -473,6 +477,7 @@ services:
       - "--public-route=*"
     profiles:
       - chronicle
+      - explorer
 
   mongo:
     image: mongo:latest
@@ -483,6 +488,7 @@ services:
       - ./data/sandboxdb/chronicle/mongodb:/data/db
     profiles:
       - chronicle
+      - explorer
 
   influx:
     image: influxdb:1.8
@@ -492,6 +498,7 @@ services:
       - ./assets/influxdb/init.iql:/docker-entrypoint-initdb.d/influx_init.iql
     profiles:
       - chronicle
+      - explorer
 
 ##################################################################
 #  Explorer                                                      #
@@ -641,7 +648,7 @@ services:
 
   bootstrap-chain:
     container_name: bootstrap-chain
-    image: iotaledger/sandbox-wasp-cli:1.0-rc
+    image: iotaledger/sandbox-wasp-cli:1.0
     volumes:
       - ./data/sandboxdb/wasp-cli/config.json:/app/wasp-cli.json
     entrypoint: /app/wasp-cli
@@ -659,7 +666,7 @@ services:
 
   fund-chain-account:
     container_name: fund-chain-account
-    image: iotaledger/sandbox-wasp-cli:1.0-rc
+    image: iotaledger/sandbox-wasp-cli:1.0
     volumes:
       - ./data/sandboxdb/wasp-cli/config.json:/app/wasp-cli.json
     entrypoint: /app/wasp-cli

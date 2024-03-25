@@ -32,6 +32,10 @@ mkdir -p data/snapshots/hornet
 mkdir -p data/sandboxdb/evm-toolkit
 mkdir -p data/sandboxdb/wasp-cli
 
+if [ ! -f data/sandboxdb/wasp/users.json ]; then
+  echo "{}" >> data/sandboxdb/wasp/users.json
+fi
+
 cp assets/wasp-cli/config.json data/sandboxdb/wasp-cli/config.json
 
 if [[ "$OSTYPE" != "darwin"* ]]; then
@@ -62,10 +66,10 @@ fi
 
 # Bootstrap chain
 echo "Bootstrap chain..."
-docker compose --profile wasp --profile bootstrap-chain up -d && docker compose logs bootstrap-chain -f && docker compose logs fund-chain-account -f
+docker compose --profile wasp-node --profile inx-indexer --profile bootstrap-chain up -d && docker compose logs bootstrap-chain -f && docker compose logs fund-chain-account -f
 echo "Configuring toolkit..."
 chain_address=$(jq -r '.chains."glass-chain"' data/sandboxdb/wasp-cli/config.json)
 sed -e "s/<httpPort>/${HTTP_PORT:-80}/g" -e "s/<chainAddress>/$chain_address/g" assets/evm-toolkit/networks.json > data/sandboxdb/evm-toolkit/networks.json
 echo "Bootstraping and funding chain done. Cleaning up..."
-docker compose --profile wasp --profile bootstrap-chain down
+docker compose --profile wasp-node --profile inx-indexer --profile bootstrap-chain down
 echo "Cleanup done, run docker compose up -d to start the network."
