@@ -16,6 +16,7 @@ runs:
   steps:
     - name: Check if a faucet profile is enabled
       id: faucet_check
+      shell: bash
       run: |
         IFS=',' read -ra PROFILES <<< "${{ env.COMPOSE_PROFILES }}" # Split by ,
         FAUCET_ENABLED=false
@@ -59,6 +60,7 @@ runs:
         cp -f ${{ inputs.protocol_parameters }} iota-sandbox/sandbox/protocol_parameters.json
     - name: Bootstrap and start sandbox
       working-directory: iota-sandbox/sandbox
+      shell: bash
       run: |
         sudo ./bootstrap.sh
         docker compose up -d
