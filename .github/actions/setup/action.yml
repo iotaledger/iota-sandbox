@@ -12,6 +12,19 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Check if a faucet profile is enabled
+      id: faucet_check
+      run: |
+        IFS=',' read -ra PROFILES <<< "${{ env.COMPOSE_PROFILES }}" # Split by ,
+        FAUCET_ENABLED=false
+        for i in "${PROFILES[@]}"; do
+          i=$(echo "$i" | xargs)  # Trim leading and trailing whitespaces
+          if [[ "$i" == "inx" || "$i" == "inx-faucet" ]]; then # Check if inx or inx-faucet profile is enabled
+            FAUCET_ENABLED=true
+            break
+          fi
+        done
+        echo "::set-output name=is_faucet::${FAUCET_ENABLED}"
     - name: Setup iota sandbox using release version
       shell: bash
       if: ${{ inputs.version != '' && inputs.branch == '' }}
@@ -46,5 +59,11 @@ runs:
     - name: Wait for tangle to start
       shell: bash
       run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- -t 60 http://localhost/health -- echo "Tangle is up"
+      env:
+        WAIT_FOR_VERSION: d48601a8a90c3d22fade68d09b4240739fb44a46 # v2.2.4
+    - name: Wait for faucet to start
+      if: ${{ steps.faucet_check.outputs.is_faucet == 'true' }}
+      shell: bash
+      run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- -t 60 http://localhost/faucet/api/info -- echo "Faucet is up"
       env:
         WAIT_FOR_VERSION: d48601a8a90c3d22fade68d09b4240739fb44a46 # v2.2.4
