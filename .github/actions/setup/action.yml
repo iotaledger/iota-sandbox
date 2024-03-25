@@ -8,7 +8,9 @@ inputs:
   branch:
     description: 'Branch/tag/commit to use'
     required: false
-    default: ''
+  protocol_parameters:
+    decsription: 'Path to custom protocol parameters file'
+    required: false
 runs:
   using: "composite"
   steps:
@@ -27,7 +29,7 @@ runs:
         echo "::set-output name=is_faucet::${FAUCET_ENABLED}"
     - name: Setup iota sandbox using release version
       shell: bash
-      if: ${{ inputs.version != '' && inputs.branch == '' }}
+      if: ${{ inputs.version && !inputs.branch }}
       run: |
         mkdir iota-sandbox
         cd iota-sandbox
@@ -42,18 +44,22 @@ runs:
         echo "Downloading sandbox from $DOWNLOAD_URL"
         curl -L -o iota_sandbox.tar.gz $DOWNLOAD_URL
         tar -xf iota_sandbox.tar.gz
-
-        # Start Tangle
-        sudo ./bootstrap.sh
-        docker compose up -d
     - name: Setup iota sandbox using gitish version
       shell: bash
-      if: ${{ inputs.branch != '' }}
+      if: ${{ inputs.branch }}
       run: |
         git clone https://github.com/iotaledger/iota-sandbox --branch ${{ inputs.branch }}
         cd iota-sandbox/sandbox
-
-        # Start Tangle
+    - name: Overwrite protocol parameters
+      shell: bash
+      if: ${{ inputs.protocol_parameters }}
+      run: |
+        ls
+        echo OVERWRITE
+        cp -f ${{ inputs.protocol_parameters }} iota-sandbox/sandbox/protocol_parameters.json
+    - name: Bootstrap and start sandbox
+      working-directory: iota-sandbox/sandbox
+      run: |
         sudo ./bootstrap.sh
         docker compose up -d
     - name: Wait for tangle to start

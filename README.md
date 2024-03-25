@@ -114,10 +114,12 @@ jobs:
       - name: Start iota sandbox
         uses: 'iotaledger/iota-sandbox/.github/actions/setup@VERION'
         with:
-          # Specify a iota-sandbox version.
+          # Optional. Specify a iota-sandbox version. Default is latest
           version: 'v1.1.0'
-          # In case you want to use a commit-ish ref, set version to '' and specify a commit-ish ref
+          # Optional. In case you want to use a commit-ish ref. If branch is set it will always overrule version
           branch: branch-xy
+          # Optional. In case you want to use your own protocol parameters
+          protocol_parameters: ./.github/workflows/protocol_parameters.json
 
       - name: Tear down iota sandbox
         uses: 'iotaledger/iota-sandbox/.github/actions/setup@VERSION'
