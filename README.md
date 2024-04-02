@@ -95,7 +95,7 @@ The IOTA Sandbox provides two actions to use the sandbox in CI/CD for testing. `
 
 ### Usage
 
-You can add those actions to your workflow by simply using it in a step. You can specify a version of the sandbox to use, or a commit-ish ref, to use any commit, branch or tag.
+You can add those actions to your workflow by simply using it in a step. You can specify a version of the sandbox or a commit-ish ref to use any commit, branch, or tag.
 
 ```yml
 name: Sandbox
@@ -114,7 +114,7 @@ jobs:
       - name: Start iota sandbox
         uses: 'iotaledger/iota-sandbox/.github/actions/setup@VERION'
         with:
-          # Optional. Specify a iota-sandbox version. Default is latest
+          # Optional. Specify an iota-sandbox version. Default is latest
           version: 'v1.1.0'
           # Optional. In case you want to use a commit-ish ref. If branch is set it will always overrule version
           branch: branch-xy
